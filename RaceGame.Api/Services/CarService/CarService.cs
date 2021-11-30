@@ -28,7 +28,7 @@ namespace RaceGame.Api.Services.CarService
             var car = new Car()
             {
                 Id = Guid.NewGuid().ToString(),
-                ClientIp = clientIp,
+                ClientId = clientIp,
                 Speed = 0,
                 Fuel = maxFuel,
                 Cartridges = startCartridges,

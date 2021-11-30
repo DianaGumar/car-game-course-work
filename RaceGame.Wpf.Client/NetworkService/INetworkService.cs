@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RaceGame.Wpf.Client
+namespace RaceGame.Wpf.Client.NetworkService
 {
-    class HttpController
+    public interface INetworkService
     {
     }
 }

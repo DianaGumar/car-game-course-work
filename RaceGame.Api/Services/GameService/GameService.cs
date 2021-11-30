@@ -92,6 +92,7 @@ namespace RaceGame.Api.Services.GameService
             }
 
             _carService.UpdateCar(car);
+
             return car;
         }
 

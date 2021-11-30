@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RaceGame.Api.Common.GameObjects.Car;
 //using RaceGame.Api.Services.CarService;
 //using RaceGame.Api.Services.MoveService;
 using RaceGame.Api.Services.GameService;
@@ -33,27 +34,25 @@ namespace RaceGame.Api.Controllers
         //    return Ok(gameObject);
         //}
 
-        // POST api/<GameObjectController>
         [HttpPost]
         [Route("ConnectGamer")]
-        public IActionResult ConnectGamer([FromQuery] string clientId)
+        public Car ConnectGamer([FromQuery] string clientId)
         {  
             var resultCar = _gameService.AddGamer(clientId);
             // получаем состояние мира и также возвращаем и его
 
-            return Ok(resultCar);
+            return resultCar;
         }
 
-        // GET api/<GameObjectController>/5
         [HttpPut]
         [Route("MoveGamer")]
-        public IActionResult MoveGamer([FromQuery] string clientId,
+        public Car MoveGamer([FromQuery] string clientId,
             [FromQuery] string gameObjectId, [FromQuery] int direction)
         {
             var resultCar = _gameService.MoveGamer(clientId, gameObjectId, direction);
             //var gameState = _gameService.GetGameState();
             //var result = new { gameObject = gameObject, gameState = gameState };
-            return Ok(resultCar);
+            return resultCar;
         }
     }
 }
