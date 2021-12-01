@@ -22,7 +22,8 @@ namespace RaceGameWPF
             settings.MajorVersion = 3;
             settings.MinorVersion = 6;
             OpenTKControl.Start(settings);
-            gameEngine = new GameEngine();
+
+            // gameEngine = new GameEngine(); // init game
         }
 
         private void OpenTKControl_Ready()
@@ -30,7 +31,8 @@ namespace RaceGameWPF
             GL.Enable(EnableCap.Blend);
             GL.Enable(EnableCap.Texture2D);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-            gameEngine.Start(new Vector2((float)Width, (float)Height));
+
+            // gameEngine.Start(new Vector2((float)Width, (float)Height)); // создаёт и добавляет все игровые объекты в себя со спрайтами
         }
 
         private void OpenTKControl_Render(TimeSpan obj)
@@ -40,11 +42,10 @@ namespace RaceGameWPF
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
             GL.Ortho(0, Width, Height, 0, 0d, 1d);
-            gameEngine.Update();
-            gameEngine.Draw();
+
+
+            // gameEngine.Update();
+            // gameEngine.Draw();
         }
-
-
-
     }
 }

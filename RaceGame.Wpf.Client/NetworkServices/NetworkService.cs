@@ -1,17 +1,18 @@
 ﻿using Newtonsoft.Json;
+using RaceGame.Api.Common.GameObjects;
 using RaceGame.Api.Common.GameObjects.Car;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
-namespace RaceGame.Wpf.Client.NetworkService
+namespace RaceGame.Wpf.Client.NetworkServices
 {
-    public class NetworkService
+    public class NetworkService : INetworkService
     {
         private HttpClient _httpClient;
-        private Car gamer;
 
         public NetworkService()
         {
@@ -23,11 +24,19 @@ namespace RaceGame.Wpf.Client.NetworkService
                 new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public async Task<Car> ConnectGamer()
+        public async Task<List<GameObject>> GetGameObjects()
         {
-            var clientId = Guid.NewGuid().ToString();
+            var response = await _httpClient.GetAsync("api/game-object");
+            var contents = await response.Content.ReadAsStringAsync();
 
-            var response = await _httpClient.PostAsJsonAsync<string>("api/GameObject/ConnectGamer", clientId);
+            var result = JsonConvert.DeserializeObject<List<GameObject>>(contents);
+
+            return result;
+        }
+
+        public async Task<Car> CreateGamer(string clientId)
+        {
+            var response = await _httpClient.PostAsJsonAsync<string>("api/gamer", clientId);
             var contents = await response.Content.ReadAsStringAsync();
 
             Car result = JsonConvert.DeserializeObject<Car>(contents);
@@ -35,10 +44,10 @@ namespace RaceGame.Wpf.Client.NetworkService
             return result;
         }
 
-        public async Task<Car> MoveGamer(Car obj)
+        public async Task<Car> MoveGamer(string gamerId, int direction)
         {
-            var response = await _httpClient.
-                PostAsJsonAsync($"api/GameObject/MoveGamer?clientId={obj}&gameObjectId={obj}&direction={obj}", "");
+            var response = await _httpClient
+                .PostAsJsonAsync<int>($"api/gamer/{gamerId}/move", direction);
             var contents = await response.Content.ReadAsStringAsync();
 
             Car result = JsonConvert.DeserializeObject<Car>(contents);

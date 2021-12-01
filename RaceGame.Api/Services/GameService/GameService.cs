@@ -3,6 +3,7 @@ using RaceGame.Api.Common.GameObjects.Car;
 using RaceGame.Api.Services.CarService;
 using RaceGame.Api.Services.MoveService;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace RaceGame.Api.Services.GameService
 {
@@ -42,6 +43,9 @@ namespace RaceGame.Api.Services.GameService
 
         public Car AddGamer(string clientId)
         {
+            // если игрок первый подключившийся - инициировать все игровые объекты?
+            // создаёт и добавляет все игровые объекты в себя со спрайтами
+
             var car = _carService.CreateCar(clientId);
             // поставить координаты на начало карты
             // задаём отображенчиские опции
@@ -62,10 +66,10 @@ namespace RaceGame.Api.Services.GameService
             return car;
         }
 
-        public Car MoveGamer(string clientId, string gameObjectId, int direction)
+        public Car MoveGamer(string clientId, int direction)
         {
             // получаем необходимого игрока
-            var car = _carService.GetCar(clientId, gameObjectId);
+            var car = _carService.GetCar(clientId);
             
             switch (direction)
             {
@@ -104,6 +108,17 @@ namespace RaceGame.Api.Services.GameService
 
             // 
             isGameStarted = true;
+        }
+
+        public void DeleteGamer(string clientId)
+        {
+            var removedGamer = gameObjects.FirstOrDefault(g => g.Id.Equals(clientId));
+            gameObjects.Remove(removedGamer);
+        }
+
+        public List<GameObject> GetGameObjects()
+        {
+            return gameObjects;
         }
     }
 }

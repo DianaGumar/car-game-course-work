@@ -9,9 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaceGameWPF", "RaceGameWPF\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RaceGame.Api", "RaceGame.Api\RaceGame.Api.csproj", "{E1D8DA77-B5E8-40C5-A664-FD8AFA2F4629}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RaceGame.Wpf.Client", "RaceGame.Wpf.Client\RaceGame.Wpf.Client.csproj", "{1824265E-E376-41C6-908D-A5E99C1C152C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RaceGame.Common", "RaceGame.Common\RaceGame.Common.csproj", "{AF1A70C6-7FD2-46CF-92EC-DC4A81AF8974}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaceGame.Common", "RaceGame.Common\RaceGame.Common.csproj", "{AF1A70C6-7FD2-46CF-92EC-DC4A81AF8974}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RaceGame.Wpf.Client", "RaceGame.Wpf.Client\RaceGame.Wpf.Client.csproj", "{D39B883C-EAF2-4472-BDAB-D97A199C89AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,14 +31,14 @@ Global
 		{E1D8DA77-B5E8-40C5-A664-FD8AFA2F4629}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1D8DA77-B5E8-40C5-A664-FD8AFA2F4629}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E1D8DA77-B5E8-40C5-A664-FD8AFA2F4629}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1824265E-E376-41C6-908D-A5E99C1C152C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1824265E-E376-41C6-908D-A5E99C1C152C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1824265E-E376-41C6-908D-A5E99C1C152C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1824265E-E376-41C6-908D-A5E99C1C152C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AF1A70C6-7FD2-46CF-92EC-DC4A81AF8974}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AF1A70C6-7FD2-46CF-92EC-DC4A81AF8974}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF1A70C6-7FD2-46CF-92EC-DC4A81AF8974}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF1A70C6-7FD2-46CF-92EC-DC4A81AF8974}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D39B883C-EAF2-4472-BDAB-D97A199C89AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D39B883C-EAF2-4472-BDAB-D97A199C89AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D39B883C-EAF2-4472-BDAB-D97A199C89AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D39B883C-EAF2-4472-BDAB-D97A199C89AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

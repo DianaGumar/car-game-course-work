@@ -23,12 +23,11 @@ namespace RaceGame.Api.Services.CarService
             startCartridges = 3;
         }
 
-        public Car CreateCar(string clientIp)
+        public Car CreateCar(string clientId)
         {
             var car = new Car()
             {
-                Id = Guid.NewGuid().ToString(),
-                ClientId = clientIp,
+                Id = clientId,
                 Speed = 0,
                 Fuel = maxFuel,
                 Cartridges = startCartridges,
@@ -38,9 +37,9 @@ namespace RaceGame.Api.Services.CarService
             return car;
         }
 
-        public Car GetCar(string clientId, string carId)
+        public Car GetCar(string clientId)
         {
-            return gamers.FirstOrDefault(c => c.Id.Equals(carId));
+            return gamers.FirstOrDefault(c => c.Id.Equals(clientId));
         }
 
         public int AddCar(Car car)

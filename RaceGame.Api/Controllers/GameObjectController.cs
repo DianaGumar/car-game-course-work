@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RaceGame.Api.Common.GameObjects.Car;
+using RaceGame.Api.Common.GameObjects;
 //using RaceGame.Api.Services.CarService;
 //using RaceGame.Api.Services.MoveService;
 using RaceGame.Api.Services.GameService;
-
+using System.Collections.Generic;
 
 namespace RaceGame.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/game-object")]
     [ApiController]
     public class GameObjectController : ControllerBase
     {
@@ -27,32 +27,10 @@ namespace RaceGame.Api.Controllers
             _gameService = gameService;
         }
 
-        //[HttpPost]
-        //public IActionResult CreateGameObject(GameObjectType gameObjectType)
-        //{
-        //    var gameObject = _gameService.CreateGameObject(gameObjectType);
-        //    return Ok(gameObject);
-        //}
-
-        [HttpPost]
-        [Route("ConnectGamer")]
-        public Car ConnectGamer([FromQuery] string clientId)
-        {  
-            var resultCar = _gameService.AddGamer(clientId);
-            // получаем состояние мира и также возвращаем и его
-
-            return resultCar;
-        }
-
-        [HttpPut]
-        [Route("MoveGamer")]
-        public Car MoveGamer([FromQuery] string clientId,
-            [FromQuery] string gameObjectId, [FromQuery] int direction)
+        [HttpGet]
+        public List<GameObject> GetAll()
         {
-            var resultCar = _gameService.MoveGamer(clientId, gameObjectId, direction);
-            //var gameState = _gameService.GetGameState();
-            //var result = new { gameObject = gameObject, gameState = gameState };
-            return resultCar;
+            return _gameService.GetGameObjects();
         }
     }
 }
