@@ -47,15 +47,6 @@ namespace RaceGame.Api.Services.GameService
             // создаёт и добавляет все игровые объекты в себя со спрайтами
 
             var car = _carService.CreateCar(clientId);
-            // поставить координаты на начало карты
-            // задаём отображенчиские опции
-            car.SizeX = 5;
-            car.SizeY = 5;
-
-            car.PositionX = 1;
-            car.PositionY = 1;
-
-            car.Speed = 1;
 
             var gamersCount = _carService.AddCar(car);
             if(gamersCount > 1)
@@ -85,12 +76,12 @@ namespace RaceGame.Api.Services.GameService
                 }
                 case 3:
                 {
-                    car = (Car)_moveService.MoveRight(car);
+                    car = (Car)_moveService.RotateRight(car);
                     break;
                 }
                 case 4:
                 {
-                    car = (Car)_moveService.MoveLeft(car);
+                    car = (Car)_moveService.RotateLeft(car);
                     break;
                 }
             }

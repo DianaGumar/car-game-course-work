@@ -1,5 +1,4 @@
 ﻿using RaceGame.Api.Common.GameObjects.Car;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -18,7 +17,7 @@ namespace RaceGame.Api.Services.CarService
         {
             gamers = new List<Car>();
 
-            maxSpeed = 5;
+            maxSpeed = 100;
             maxFuel = 100;
             startCartridges = 3;
         }
@@ -28,7 +27,14 @@ namespace RaceGame.Api.Services.CarService
             var car = new Car()
             {
                 Id = clientId,
+                PositionX = 150,
+                PositionY = 190,
+                SizeX = 61,
+                SizeY = 24,
                 Speed = 0,
+                MaxSpeed = maxSpeed,
+                SpeedChange = 1,
+                Angle = 0,
                 Fuel = maxFuel,
                 Cartridges = startCartridges,
                 IsFailingTire = false

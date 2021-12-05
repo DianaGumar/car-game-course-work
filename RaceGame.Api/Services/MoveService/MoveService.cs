@@ -1,4 +1,5 @@
 ﻿using RaceGame.Api.Common.GameObjects;
+using OpenTK.Mathematics;
 
 namespace RaceGame.Api.Services.MoveService
 {
@@ -6,56 +7,74 @@ namespace RaceGame.Api.Services.MoveService
     {
         public MoveGameObject DownSpeed(MoveGameObject moveObject)
         {
-            //if (state.IsKeyDown(controls[0]) && speed < maxSpeed)  //вверх, вперед
-            //{
-            //    speed += 0.02f;
-            //}
-            //if (state.IsKeyDown(controls[1]) && speed > -maxSpeed / 2) //вниз, движение назад
-            //{
-            //    speed -= 0.02f;
-            //}
-            //if (state.IsKeyDown(controls[2])) //поворот вправо
-            //{
-            //    Angle += 0.02f;
-            //}
-            //if (state.IsKeyDown(controls[3])) //поворот влево
-            //{
-            //    Angle -= 0.02f;
-            //}
-
             moveObject.Speed -= moveObject.SpeedChange;
-            return moveObject;
+            return UpdatePosition(moveObject);
         }
 
         public MoveGameObject UpSpeed(MoveGameObject moveObject)
         {
             moveObject.Speed += moveObject.SpeedChange;
-            return moveObject;
+            return UpdatePosition(moveObject);
         }
 
-        public MoveGameObject MoveLeft(MoveGameObject moveObject)
+        public MoveGameObject RotateLeft(MoveGameObject moveObject)
         {
-            moveObject.PositionX -= moveObject.Speed;
-            return moveObject;
+            //поворот влево
+            moveObject.Angle -= 0.02f;
+
+            //moveObject.PositionX -= moveObject.Speed;
+            return UpdatePosition(moveObject);
         }
 
-        public MoveGameObject MoveRight(MoveGameObject moveObject)
+        public MoveGameObject RotateRight(MoveGameObject moveObject)
         {
-            moveObject.PositionX -= moveObject.Speed;
-            return moveObject;
+            //поворот вправо
+            moveObject.Angle += 0.02f;
+
+            //moveObject.PositionX -= moveObject.Speed;
+            return UpdatePosition(moveObject);
         }
 
         public MoveGameObject MoveBack(MoveGameObject moveObject)
         {
-            moveObject.PositionX -= moveObject.Speed;
-            return moveObject;
+            if (moveObject.Speed > -moveObject.MaxSpeed / 2) //вниз, движение назад
+            {
+                moveObject.Speed -= 0.02f;
+            }
+
+            //moveObject.PositionX -= moveObject.Speed;
+            return UpdatePosition(moveObject);
         }
 
         public MoveGameObject MoveForward(MoveGameObject moveObject)
         {
-            moveObject.PositionX += moveObject.Speed;
-            return moveObject;
-            //Position += Vector2.Transform(Vector2.UnitX, Quaternion.FromEulerAngles(0, 0, Angle)) * (speed * SpeedChange); //движение вперед с поворотом
+            if (moveObject.Speed < moveObject.MaxSpeed)  //вверх, вперед
+            {
+                moveObject.Speed += 0.02f;
+            }
+
+            //moveObject.PositionX += moveObject.Speed;
+            return UpdatePosition(moveObject);
         }
+
+        public MoveGameObject UpdatePosition(MoveGameObject moveObject)
+        {
+            //движение вперед с поворотом
+            var vector = Vector2.Transform(Vector2.UnitX,
+                Quaternion.FromEulerAngles(0, 0, moveObject.Angle)) * (moveObject.Speed * moveObject.SpeedChange);
+
+            moveObject.PositionX += vector.X;
+            moveObject.PositionY += vector.Y;
+
+            return moveObject;
+        }
+
+        //public static Vector2 operator +(Vector2 left, Vector2 right)
+        //{
+        //    left.X += right.X;
+        //    left.Y += right.Y;
+        //    return left;
+        //}
+
     }
 }

@@ -4,9 +4,9 @@ namespace RaceGame.Api.Services.MoveService
 {
     public interface IMoveService
     {
-        public MoveGameObject MoveLeft(MoveGameObject moveObject);
+        public MoveGameObject RotateLeft(MoveGameObject moveObject);
 
-        public MoveGameObject MoveRight(MoveGameObject moveObject);
+        public MoveGameObject RotateRight(MoveGameObject moveObject);
 
         public MoveGameObject MoveBack(MoveGameObject moveObject);
 
