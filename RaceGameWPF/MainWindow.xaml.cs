@@ -1,10 +1,10 @@
 ﻿using OpenTK.Wpf;
-using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System;
 using System.Windows;
-using RaceGameLibrary;
 using Color = System.Drawing.Color;
+using RaceGame.Wpf.Client.ClientState;
+using System.Windows.Input;
 
 namespace RaceGameWPF
 {
@@ -13,7 +13,8 @@ namespace RaceGameWPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        GameEngine gameEngine;
+        private readonly IClientStateService _clientStateService = new ClientStateService();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -22,8 +23,6 @@ namespace RaceGameWPF
             settings.MajorVersion = 3;
             settings.MinorVersion = 6;
             OpenTKControl.Start(settings);
-
-            // gameEngine = new GameEngine(); // init game
         }
 
         private void OpenTKControl_Ready()
@@ -32,7 +31,8 @@ namespace RaceGameWPF
             GL.Enable(EnableCap.Texture2D);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
-            // gameEngine.Start(new Vector2((float)Width, (float)Height)); // создаёт и добавляет все игровые объекты в себя со спрайтами
+            // подключает игрока к серверу, получает текущее состояние игры.
+            _clientStateService.ConnectClient();
         }
 
         private void OpenTKControl_Render(TimeSpan obj)
@@ -43,9 +43,22 @@ namespace RaceGameWPF
             GL.LoadIdentity();
             GL.Ortho(0, Width, Height, 0, 0d, 1d);
 
+            // вызывается раз в n момент времени
+            // обновляет состояние игры - получает текущее состояние игровых объектов
+            //_clientStateService.Update();
 
-            // gameEngine.Update();
-            // gameEngine.Draw();
+            // отрисовывает игровые объекты
+            _clientStateService.Update();
+            _clientStateService.Draw();
+        }
+
+        private void glWpfControl_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.A || e.Key == Key.W || e.Key == Key.S || e.Key == Key.D)
+            {
+                // обновляет состояние игры через действие игрока - по пришедшей от клиента нажатой клавише
+                _clientStateService.ClientAction(e.Key);
+            }
         }
     }
 }

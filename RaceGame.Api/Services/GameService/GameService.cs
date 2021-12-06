@@ -16,7 +16,6 @@ namespace RaceGame.Api.Services.GameService
         //private Random random;
 
         private List<GameObject> gameObjects;
-        
 
         private readonly ICarService _carService;
         private readonly IMoveService _moveService;
@@ -49,6 +48,7 @@ namespace RaceGame.Api.Services.GameService
             var car = _carService.CreateCar(clientId);
 
             var gamersCount = _carService.AddCar(car);
+
             if(gamersCount > 1)
             {
                 StartGame();
@@ -64,6 +64,11 @@ namespace RaceGame.Api.Services.GameService
             
             switch (direction)
             {
+                case 0:
+                {
+                    car = (Car)_moveService.UpdatePosition(car);
+                    break;
+                }
                 case 1: 
                 { 
                     car = (Car)_moveService.MoveForward(car); 
@@ -107,9 +112,13 @@ namespace RaceGame.Api.Services.GameService
             gameObjects.Remove(removedGamer);
         }
 
-        public List<GameObject> GetGameObjects()
+        public List<GameObject> GetGameObjects(string gamerId)
         {
-            return gameObjects;
+            // получает всех игроков кроме себя
+            var result = gameObjects;
+            result.AddRange(_carService.GetCars().Where(c => !c.Id.Equals(gamerId)).ToList());
+
+            return result;
         }
     }
 }

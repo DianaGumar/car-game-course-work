@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:RaceGameWPF"
         xmlns:glWpfControl="clr-namespace:OpenTK.Wpf;assembly=GLWpfControl"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="1440">
+        KeyDown="glWpfControl_KeyDown"
+        Title="MainWindow" Height="630" Width="1080">
     <Grid>
         <glWpfControl:GLWpfControl x:Name="OpenTKControl" Render="OpenTKControl_Render" Ready="OpenTKControl_Ready"></glWpfControl:GLWpfControl>
     </Grid>

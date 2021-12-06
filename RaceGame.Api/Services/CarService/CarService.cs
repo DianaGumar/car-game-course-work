@@ -11,7 +11,7 @@ namespace RaceGame.Api.Services.CarService
 
         private float maxSpeed;
 
-        private readonly List<Car> gamers;
+        private List<Car> gamers;
 
         public CarService()
         {
@@ -33,7 +33,7 @@ namespace RaceGame.Api.Services.CarService
                 SizeY = 24,
                 Speed = 0,
                 MaxSpeed = maxSpeed,
-                SpeedChange = 1,
+                SpeedChange = 2,
                 Angle = 0,
                 Fuel = maxFuel,
                 Cartridges = startCartridges,
@@ -60,6 +60,11 @@ namespace RaceGame.Api.Services.CarService
             var originCar = gamers.FirstOrDefault(c => c.Id.Equals(car.Id));
             gamers.Remove(originCar);
             gamers.Add(car);
+        }
+
+        public List<Car> GetCars()
+        {
+            return gamers;
         }
     }
 }

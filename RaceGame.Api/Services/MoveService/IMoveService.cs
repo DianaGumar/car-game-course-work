@@ -11,5 +11,7 @@ namespace RaceGame.Api.Services.MoveService
         public MoveGameObject MoveBack(MoveGameObject moveObject);
 
         public MoveGameObject MoveForward(MoveGameObject moveObject);
+
+        public MoveGameObject UpdatePosition(MoveGameObject moveObject);
     }
 }
