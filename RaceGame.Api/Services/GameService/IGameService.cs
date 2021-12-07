@@ -13,5 +13,9 @@ namespace RaceGame.Api.Services.GameService
         public void DeleteGamer(string clientId);
 
         public List<GameObject> GetGameObjects(string gamerId);
+
+        public List<GameObject> GetGameObjects();
+
+        public List<Car> GetAllGamers();
     }
 }

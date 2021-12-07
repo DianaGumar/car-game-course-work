@@ -4,9 +4,10 @@ namespace RaceGame.Wpf.Client.ClientState
 {
     public interface IClientStateService
     {
-        void ConnectClient();
+        bool ConnectClient();
         void ClientAction(Key key);
         void Update();
         void Draw();
+        void EndGame();
     }
 }

@@ -21,5 +21,11 @@ namespace RaceGame.Api.Controllers
         {
             return _gameService.GetGameObjects(gamerId);
         }
+
+        [HttpGet("all")]
+        public List<GameObject> GetAll()
+        {
+            return _gameService.GetGameObjects();
+        }
     }
 }

@@ -16,6 +16,8 @@ namespace RaceGame.Wpf.Client.ClientState
         //private Dictionary<string, GameObject> _gameObjects;
         private List<GameObject> _gameObjects;
         private Car _gamer;
+        private Car _enemyGamer;
+        private bool isGamerCreated;
 
         public ClientStateService()
         {
@@ -26,14 +28,16 @@ namespace RaceGame.Wpf.Client.ClientState
         }
 
         // при старте клиента
-        public void ConnectClient()
+        public bool ConnectClient()
         {
             var clientId = Guid.NewGuid().ToString();
             // connect gamer to game
             _gamer = _networkService.CreateGamer(clientId);
             //_gamer = (Car)_drawService.LoadSprite("car1.png", _gamer);
 
-            Update();
+            isGamerCreated = _gamer != null;
+
+            return isGamerCreated;
         }
 
         public void ClientAction(Key key)
@@ -46,32 +50,40 @@ namespace RaceGame.Wpf.Client.ClientState
         // в n-ый промежуток времени
         public void Update()
         {
-            // игрок продолжает движение на заданной скорости
-            _gamer = _networkService.MoveGamer(_gamer.Id, 0);
+            if(isGamerCreated)
+            {
+                // игрок продолжает движение на заданной скорости
+                _gamer = _networkService.MoveGamer(_gamer.Id, 0);
 
-            // работа с колизией происходит на стороне сервера
-            // кидает запрос на получение обновлённого состояния игры
-            // get game state
+                // работа с колизией происходит на стороне сервера
+                // кидает запрос на получение обновлённого состояния игры
+                _enemyGamer = _networkService.GetEnemyGamer(_gamer.Id);
+                //var gameObjects = _networkService.GetGameObjects();
 
-            //_gameObjects = _networkService.GetGameObjects(_gamer.Id);
-
-            //var gameObjects = _networkService.GetGameObjects();
-
-            //for (int i = 0; i < gameObjects.Count; i++)
-            //{
-            //    //gameObjects[i] = _drawService.LoadSprite("", gameObjects[i]);
-            //    _gameObjects.Add(gameObjects[i].Id, gameObjects[i]);
-            //}
+                //for (int i = 0; i < gameObjects.Count; i++)
+                //{
+                //    //gameObjects[i] = _drawService.LoadSprite("", gameObjects[i]);
+                //    _gameObjects.Add(gameObjects[i].Id, gameObjects[i]);
+                //}
+            }
         }
 
         public void Draw()
         {
-            _drawService.Draw(_gamer);
-
-            // берёт существующие игровые объекты и отрисовывает
-            foreach (var obj in _gameObjects)
+            if (isGamerCreated)
             {
-                _drawService.Draw(obj);
+                _drawService.Draw(_gamer);
+
+                if (_enemyGamer != null)
+                {
+                    _drawService.Draw(_enemyGamer);
+                }       
+
+                // берёт существующие игровые объекты и отрисовывает
+                foreach (var obj in _gameObjects)
+                {
+                    _drawService.Draw(obj);
+                }
             }
         }
 
@@ -99,6 +111,11 @@ namespace RaceGame.Wpf.Client.ClientState
             }
 
             return code;
+        }
+
+        public void EndGame()
+        {
+            _networkService.DeleteGamer(_gamer.Id);
         }
     }
 }

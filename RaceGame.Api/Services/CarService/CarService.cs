@@ -58,13 +58,24 @@ namespace RaceGame.Api.Services.CarService
         public void UpdateCar(Car car)
         {
             var originCar = gamers.FirstOrDefault(c => c.Id.Equals(car.Id));
-            gamers.Remove(originCar);
-            gamers.Add(car);
+            if (originCar != null) 
+            {
+                originCar = car;
+            } 
+
+            //gamers.Remove(originCar);
+            //gamers.Add(car);
         }
 
         public List<Car> GetCars()
         {
             return gamers;
+        }
+
+        public void DeleteCar(string id)
+        {
+            var removedGamer = gamers.First(g => g.Id.Equals(id));
+            gamers.Remove(removedGamer);
         }
     }
 }

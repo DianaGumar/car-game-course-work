@@ -23,19 +23,25 @@ namespace RaceGame.Wpf.Client.NetworkServices
                 new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
+        public Car GetEnemyGamer(string clientId)
+        {
+            var response = _httpClient.GetAsync($"api/gamer/{clientId}/enemy").Result;
+            var content = response.Content.ReadAsStringAsync().Result;
+
+            return JsonConvert.DeserializeObject<Car>(content);
+        }
+
         public List<GameObject> GetGameObjects(string gamerId)
         {
             var response = _httpClient.GetAsync($"api/game-object/{gamerId}/all").Result;
             var content = response.Content.ReadAsStringAsync().Result;
 
-            var result = JsonConvert.DeserializeObject<List<GameObject>>(content);
-
-            return result;
+            return JsonConvert.DeserializeObject<List<GameObject>>(content);
         }
 
         public Car CreateGamer(string clientId)
         {
-            var response = _httpClient.PostAsJsonAsync<string>("api/gamer", clientId).Result;
+            var response = _httpClient.PostAsJsonAsync($"api/gamer", clientId).Result;
             var content = response.Content.ReadAsStringAsync().Result;
 
             Car result = JsonConvert.DeserializeObject<Car>(content);
@@ -46,12 +52,15 @@ namespace RaceGame.Wpf.Client.NetworkServices
         public Car MoveGamer(string gamerId, int direction)
         {
             var response = _httpClient
-                .PutAsJsonAsync<int>($"api/gamer/{gamerId}/move", direction).Result;
+                .PutAsJsonAsync($"api/gamer/{gamerId}/move/{direction}", "").Result;
             var content = response.Content.ReadAsStringAsync().Result;
 
-            Car result = JsonConvert.DeserializeObject<Car>(content);
+            return JsonConvert.DeserializeObject<Car>(content);
+        }
 
-            return result;
+        public void DeleteGamer(string gamerId)
+        {
+            _ = _httpClient.DeleteAsync($"api/gamer/{gamerId}").Result;
         }
     }
 }

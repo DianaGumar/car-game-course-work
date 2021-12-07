@@ -44,14 +44,21 @@ namespace RaceGame.Api.Services.GameService
         {
             // если игрок первый подключившийся - инициировать все игровые объекты?
             // создаёт и добавляет все игровые объекты в себя со спрайтами
+            Car car = null;
+            var count = _carService.GetCars().Count;
 
-            var car = _carService.CreateCar(clientId);
-
-            var gamersCount = _carService.AddCar(car);
-
-            if(gamersCount > 1)
+            if (count < 2)
+            {
+                car = _carService.CreateCar(clientId);
+                var gamersCount = _carService.AddCar(car);
+            }
+            else if(count == 1)
             {
                 StartGame();
+            }
+            else
+            {
+                car = _carService.GetCars().FirstOrDefault();
             }
 
             return car;
@@ -108,8 +115,7 @@ namespace RaceGame.Api.Services.GameService
 
         public void DeleteGamer(string clientId)
         {
-            var removedGamer = gameObjects.FirstOrDefault(g => g.Id.Equals(clientId));
-            gameObjects.Remove(removedGamer);
+            _carService.DeleteCar(clientId);
         }
 
         public List<GameObject> GetGameObjects(string gamerId)
@@ -119,6 +125,16 @@ namespace RaceGame.Api.Services.GameService
             result.AddRange(_carService.GetCars().Where(c => !c.Id.Equals(gamerId)).ToList());
 
             return result;
+        }
+
+        public List<GameObject> GetGameObjects()
+        {
+            return gameObjects;
+        }
+
+        public List<Car> GetAllGamers()
+        {
+            return _carService.GetCars();
         }
     }
 }

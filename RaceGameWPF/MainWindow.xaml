@@ -9,6 +9,9 @@
         KeyDown="glWpfControl_KeyDown"
         Title="MainWindow" Height="630" Width="1080">
     <Grid>
-        <glWpfControl:GLWpfControl x:Name="OpenTKControl" Render="OpenTKControl_Render" Ready="OpenTKControl_Ready"></glWpfControl:GLWpfControl>
+        <glWpfControl:GLWpfControl x:Name="OpenTKControl" Render="OpenTKControl_Render" Ready="OpenTKControl_Ready">
+        </glWpfControl:GLWpfControl>
+
+        <Button x:Name="button1" Width="70" Height="30" Content="End game" Click="EndGame_Button_Click" Margin="967,32,35,537" />
     </Grid>
 </Window>

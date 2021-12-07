@@ -15,6 +15,12 @@ namespace RaceGameWPF
     {
         private readonly IClientStateService _clientStateService = new ClientStateService();
 
+        //protected override void OnClosed(EventArgs e)
+        //{
+        //    _clientStateService.EndGame();
+        //    base.OnClosed(e);
+        //}
+
         public MainWindow()
         {
             InitializeComponent();
@@ -32,7 +38,22 @@ namespace RaceGameWPF
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
             // подключает игрока к серверу, получает текущее состояние игры.
-            _clientStateService.ConnectClient();
+            var isCreated = _clientStateService.ConnectClient();
+
+            if (!isCreated)
+            {
+                var result = MessageBox.Show(
+                    "Game already started. Please try to connect later.", "Client", MessageBoxButton.YesNo);
+                switch (result)
+                {
+                    case MessageBoxResult.Yes:
+                        OpenTKControl_Ready();
+                        break;
+                    case MessageBoxResult.No:
+                        this.Close();
+                        break;
+                }
+            }
         }
 
         private void OpenTKControl_Render(TimeSpan obj)
@@ -59,6 +80,13 @@ namespace RaceGameWPF
                 // обновляет состояние игры через действие игрока - по пришедшей от клиента нажатой клавише
                 _clientStateService.ClientAction(e.Key);
             }
+        }
+
+        private void EndGame_Button_Click(object sender, RoutedEventArgs e)
+        {
+            _clientStateService.EndGame();
+
+            this.Close();
         }
     }
 }

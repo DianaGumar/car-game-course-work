@@ -10,6 +10,10 @@ namespace RaceGame.Wpf.Client.NetworkServices
 
         Car CreateGamer(string clientId);
 
+        Car GetEnemyGamer(string currentGamerId);
+
         Car MoveGamer(string gamerId, int direction);
+
+        void DeleteGamer(string clientId);
     }
 }
