@@ -48,8 +48,19 @@ namespace RaceGame.Api.Services.MoveService
             var vector = Vector2.Transform(Vector2.UnitX,
                 Quaternion.FromEulerAngles(0, 0, moveObject.Angle)) * (moveObject.Speed * moveObject.SpeedChange);
 
+            moveObject.OldPositionX = moveObject.PositionX;
+            moveObject.OldPositionY = moveObject.PositionY;
+
             moveObject.PositionX += vector.X;
             moveObject.PositionY += vector.Y;
+
+            return moveObject;
+        }
+
+        public MoveGameObject ReturnPreviosState(MoveGameObject moveObject)
+        {
+            moveObject.PositionX = moveObject.OldPositionX;
+            moveObject.PositionY = moveObject.OldPositionY;
 
             return moveObject;
         }

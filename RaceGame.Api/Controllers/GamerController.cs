@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RaceGame.Api.Common.GameObjects.Car;
+using RaceGame.Api.Services.CarService;
 using RaceGame.Api.Services.GameService;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +12,12 @@ namespace RaceGame.Api.Controllers
     public class GamerController : ControllerBase
     {
         private readonly IGameService _gameService;
+        private readonly ICarService _carServise;
 
-        public GamerController(IGameService gameService)
+        public GamerController(IGameService gameService, ICarService carServise)
         {
             _gameService = gameService;
+            _carServise = carServise;
         }
 
         // POST connect gamer
@@ -31,7 +34,7 @@ namespace RaceGame.Api.Controllers
         [HttpGet("{clientId}/enemy")]
         public Car Get(string clientId)
         {
-            return _gameService.GetAllGamers().FirstOrDefault(c => !c.Id.Equals(clientId));
+            return _carServise.GetEnemyCar(clientId);
         }
 
         // get enemy gamer

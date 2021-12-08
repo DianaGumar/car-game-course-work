@@ -10,5 +10,8 @@
         //public float DirectionY { get; set; }
 
         public float SpeedChange { get; set; } // when speed step
+
+        public float OldPositionX { get; set; }
+        public float OldPositionY { get; set; }
     }
 }

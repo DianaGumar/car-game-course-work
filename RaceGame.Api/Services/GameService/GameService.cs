@@ -4,6 +4,7 @@ using RaceGame.Api.Services.CarService;
 using RaceGame.Api.Services.MoveService;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 
 namespace RaceGame.Api.Services.GameService
 {
@@ -98,9 +99,17 @@ namespace RaceGame.Api.Services.GameService
                 }
             }
 
-            _carService.UpdateCar(car);
+            // проверка на коллизию
+            if (!CheckCollision(car))
+            {
+                _carService.UpdateCar(car);
 
-            return car;
+                return car;
+            }
+            else
+            {
+                return (Car)_moveService.ReturnPreviosState(_carService.GetCar(clientId));
+            }
         }
 
         private void StartGame()
@@ -136,5 +145,55 @@ namespace RaceGame.Api.Services.GameService
         {
             return _carService.GetCars();
         }
+
+        // проверка на коллизию со свеми объектами
+        private bool CheckCollision(GameObject gameObject)
+        {
+            var collision = false;
+
+            var enemy = _carService.GetEnemyCar(gameObject.Id);
+            if (enemy != null)
+            {
+                collision = collision || IsCollision(gameObject, enemy);
+            }           
+
+            foreach(var obj in gameObjects)
+            {
+                collision = collision || IsCollision(gameObject, obj);
+            }
+
+            return collision;
+        }
+
+        // алгоритм коллизии
+        private bool IsCollision(GameObject r1, GameObject r2)
+        {
+            // прямоугольник х примоугольник
+            float sizeSpecific = 0.89f;
+
+            Vector2 pr1 = new Vector2(r1.PositionX, r1.PositionY);
+            Vector2 pr2 = new Vector2(r2.PositionX, r2.PositionY);
+            Vector2 sr1 = new Vector2(r1.SizeX, r1.SizeY);
+            Vector2 sr2 = new Vector2(r2.SizeX, r2.SizeY);
+
+            if (pr1.X + sr1.X * sizeSpecific >= pr2.X &&    // r1 right edge past r2 left
+                pr1.X <= pr2.X + sr2.X * sizeSpecific &&    // r1 left edge past r2 right
+                pr1.Y + sr1.Y * sizeSpecific >= pr2.Y &&    // r1 top edge past r2 bottom
+                pr1.Y <= pr2.Y + sr2.Y * sizeSpecific)      // r1 bottom edge past r2 top
+            {
+                return true;
+            }
+            return false;
+        }
+
+        //private Vector2 RandomPosition(Vector2 min, Vector2 max)
+        //{
+        //    Vector2 cord = new Vector2();
+
+        //    cord.X = (float)(rand.NextDouble() * (max.X - min.X) + min.X);
+        //    cord.Y = (float)(rand.NextDouble() * (max.Y - min.Y) + min.Y);
+
+        //    return cord;
+        //}
     }
 }

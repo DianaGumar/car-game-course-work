@@ -43,6 +43,11 @@ namespace RaceGame.Api.Services.CarService
             return car;
         }
 
+        public Car GetEnemyCar(string clientId)
+        {
+            return gamers.FirstOrDefault(c => !c.Id.Equals(clientId));
+        }
+
         public Car GetCar(string clientId)
         {
             return gamers.FirstOrDefault(c => c.Id.Equals(clientId));
