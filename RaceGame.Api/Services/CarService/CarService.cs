@@ -24,20 +24,32 @@ namespace RaceGame.Api.Services.CarService
 
         public Car CreateCar(string clientId)
         {
+            float positionX = 110;
+            float positionY = 210;
+
+            float sizeX = 40;
+            float sizeY = 16;
+
+            if(gamers.Count> 0)
+            {
+                positionY = gamers[0].PositionY + sizeY + 10;
+            }
+
             var car = new Car()
             {
                 Id = clientId,
-                PositionX = 150,
-                PositionY = 190,
-                SizeX = 61,
-                SizeY = 24,
+                PositionX = positionX,
+                PositionY = positionY,
+                SizeX = sizeX,
+                SizeY = sizeY,
                 Speed = 0,
                 MaxSpeed = maxSpeed,
                 SpeedChange = 2,
                 Angle = 0,
                 Fuel = maxFuel,
                 Cartridges = startCartridges,
-                IsFailingTire = false
+                IsFailingTire = false,
+                LevelsSequence = new int[9]
             };
 
             return car;

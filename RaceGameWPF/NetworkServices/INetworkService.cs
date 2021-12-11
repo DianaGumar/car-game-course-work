@@ -15,5 +15,8 @@ namespace RaceGame.Wpf.Client.NetworkServices
         Car MoveGamer(string gamerId, int direction);
 
         void DeleteGamer(string clientId);
+
+        List<GameObject> GetLevel();
+
     }
 }

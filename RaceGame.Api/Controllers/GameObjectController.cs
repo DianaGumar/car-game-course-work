@@ -2,6 +2,7 @@
 using RaceGame.Api.Common.GameObjects;
 using RaceGame.Api.Services.GameService;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace RaceGame.Api.Controllers
 {
@@ -26,6 +27,12 @@ namespace RaceGame.Api.Controllers
         public List<GameObject> GetAll()
         {
             return _gameService.GetGameObjects();
+        }
+
+        [HttpGet("level")]
+        public List<GameObject> GetLevel()
+        {
+            return _gameService.GetLevel().ToList();
         }
     }
 }

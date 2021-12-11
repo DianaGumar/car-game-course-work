@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using RaceGame.Wpf.Client.DrawServices;
 using RaceGame.Api.Common.GameObjects.Car;
 using System.Windows.Input;
+using System.Drawing;
+using System.Linq;
 
 namespace RaceGame.Wpf.Client.ClientState
 {
@@ -15,9 +17,121 @@ namespace RaceGame.Wpf.Client.ClientState
 
         //private Dictionary<string, GameObject> _gameObjects;
         private List<GameObject> _gameObjects;
+        private List<GameObject> _level;
         private Car _gamer;
         private Car _enemyGamer;
         private bool isGamerCreated;
+        private Color[] _colors = new Color[]
+        {
+            Color.Aqua,
+            Color.BlueViolet,
+            Color.LightGreen,
+            Color.Pink,
+            Color.Beige,
+            Color.BurlyWood,
+            Color.Bisque,
+            Color.Aquamarine,
+            Color.BlanchedAlmond,
+            Color.Aqua,
+            Color.BlueViolet,
+            Color.LightGreen,
+            Color.Pink,
+            Color.Beige,
+            Color.BurlyWood,
+            Color.Bisque,
+            Color.Aquamarine,
+            Color.BlanchedAlmond,
+            Color.Aqua,
+            Color.BlueViolet,
+            Color.LightGreen,
+            Color.Pink,
+            Color.Beige,
+            Color.BurlyWood,
+            Color.Bisque,
+            Color.Aquamarine,
+            Color.BlanchedAlmond,
+            Color.Aqua,
+            Color.BlueViolet,
+            Color.LightGreen,
+            Color.Pink,
+            Color.Beige,
+            Color.BurlyWood,
+            Color.Bisque,
+            Color.Aquamarine,
+            Color.BlanchedAlmond,
+                        Color.Aqua,
+            Color.BlueViolet,
+            Color.LightGreen,
+            Color.Pink,
+            Color.Beige,
+            Color.BurlyWood,
+            Color.Bisque,
+            Color.Aquamarine,
+            Color.BlanchedAlmond,
+            Color.Aqua,
+            Color.BlueViolet,
+            Color.LightGreen,
+            Color.Pink,
+            Color.Beige,
+            Color.BurlyWood,
+            Color.Bisque,
+            Color.Aquamarine,
+            Color.BlanchedAlmond,
+            Color.Aqua,
+            Color.BlueViolet,
+            Color.LightGreen,
+            Color.Pink,
+            Color.Beige,
+            Color.BurlyWood,
+            Color.Bisque,
+            Color.Aquamarine,
+            Color.BlanchedAlmond,
+            Color.Aqua,
+            Color.BlueViolet,
+            Color.LightGreen,
+            Color.Pink,
+            Color.Beige,
+            Color.BurlyWood,
+            Color.Bisque,
+            Color.Aquamarine,
+            Color.BlanchedAlmond,
+                        Color.Aqua,
+            Color.BlueViolet,
+            Color.LightGreen,
+            Color.Pink,
+            Color.Beige,
+            Color.BurlyWood,
+            Color.Bisque,
+            Color.Aquamarine,
+            Color.BlanchedAlmond,
+            Color.Aqua,
+            Color.BlueViolet,
+            Color.LightGreen,
+            Color.Pink,
+            Color.Beige,
+            Color.BurlyWood,
+            Color.Bisque,
+            Color.Aquamarine,
+            Color.BlanchedAlmond,
+            Color.Aqua,
+            Color.BlueViolet,
+            Color.LightGreen,
+            Color.Pink,
+            Color.Beige,
+            Color.BurlyWood,
+            Color.Bisque,
+            Color.Aquamarine,
+            Color.BlanchedAlmond,
+            Color.Aqua,
+            Color.BlueViolet,
+            Color.LightGreen,
+            Color.Pink,
+            Color.Beige,
+            Color.BurlyWood,
+            Color.Bisque,
+            Color.Aquamarine,
+            Color.BlanchedAlmond,
+        };
 
         public ClientStateService()
         {
@@ -25,6 +139,11 @@ namespace RaceGame.Wpf.Client.ClientState
             _drawService = new DrawService();
             //_gameObjects = new Dictionary<string, GameObject>();
             _gameObjects = new List<GameObject>();
+        }
+
+        public void GetLevel()
+        {
+            _level = _networkService.GetLevel();
         }
 
         // при старте клиента
@@ -72,17 +191,29 @@ namespace RaceGame.Wpf.Client.ClientState
         {
             if (isGamerCreated)
             {
-                _drawService.Draw(_gamer);
-
-                if (_enemyGamer != null)
+                for (int i = 0; i < _level.Count(); i++)
                 {
-                    _drawService.Draw(_enemyGamer);
-                }       
+                    _drawService.Draw(_level[i], _colors[i]);
+                }
 
                 // берёт существующие игровые объекты и отрисовывает
                 foreach (var obj in _gameObjects)
                 {
-                    _drawService.Draw(obj);
+                    _drawService.Draw(obj, Color.BlanchedAlmond);
+                }    
+
+                if (_enemyGamer != null)
+                {
+                    _drawService.Draw(_enemyGamer, Color.Black);
+                }
+
+                if (_gamer.IsCollizion)
+                {
+                    _drawService.Draw(_gamer, Color.Red);
+                }
+                else
+                {
+                    _drawService.Draw(_gamer, Color.White);
                 }
             }
         }

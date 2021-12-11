@@ -20,11 +20,13 @@ namespace RaceGame.Wpf.Client.DrawServices
         }
 
         // передаём объект KeyValuePair<int, Vector2> sprite
-        public void Draw(GameObject obj)
+        public void Draw(GameObject obj, Color color)
         {
-            var position = new Vector2(obj.PositionX, obj.PositionY);
+            var position = new Vector2(obj.PositionX - obj.SizeX/2, obj.PositionY - obj.SizeY/2);
             var size = new Vector2(obj.SizeX, obj.SizeY);
             var Size = size; // new Vector2(obj.SpriteSizeX, obj.SpriteSizeY);
+
+            //var center = mul(size, 0.5f);
             Vector2 center = position + size / 2;
 
             Vector2[] vertices = new Vector2[4]
@@ -38,7 +40,7 @@ namespace RaceGame.Wpf.Client.DrawServices
             //GL.BindTexture(TextureTarget.Texture2D, obj.SpriteId);
             GL.Begin(PrimitiveType.Quads);
             
-            GL.Color3(Color.White);
+            GL.Color3(color);
             for (int i = 0; i < 4; i++)
             {
                 GL.TexCoord2(vertices[i]);
@@ -85,6 +87,14 @@ namespace RaceGame.Wpf.Client.DrawServices
             return obj;
             // return id with size-vector
             //return new KeyValuePair<int, Vector2>(id, new Vector2(bmp.Height, bmp.Width));
+        }
+
+        public static Vector2 mul(Vector2 v1, float scalar)
+        {
+            v1.X = v1.X * scalar;
+            v1.Y = v1.Y * scalar;
+
+            return v1;
         }
 
         public void Dispose()

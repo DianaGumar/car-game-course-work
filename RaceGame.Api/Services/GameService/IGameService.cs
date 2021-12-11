@@ -17,5 +17,7 @@ namespace RaceGame.Api.Services.GameService
         public List<GameObject> GetGameObjects();
 
         public List<Car> GetAllGamers();
+
+        public GameObject[] GetLevel();
     }
 }

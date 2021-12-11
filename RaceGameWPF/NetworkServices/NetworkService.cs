@@ -39,6 +39,14 @@ namespace RaceGame.Wpf.Client.NetworkServices
             return JsonConvert.DeserializeObject<List<GameObject>>(content);
         }
 
+        public List<GameObject> GetLevel()
+        {
+            var response = _httpClient.GetAsync($"api/game-object/level").Result;
+            var content = response.Content.ReadAsStringAsync().Result;
+
+            return JsonConvert.DeserializeObject<List<GameObject>>(content);
+        }
+
         public Car CreateGamer(string clientId)
         {
             var response = _httpClient.PostAsJsonAsync($"api/gamer", clientId).Result;
