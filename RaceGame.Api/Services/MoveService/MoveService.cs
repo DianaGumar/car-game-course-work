@@ -1,5 +1,6 @@
 ﻿using RaceGame.Api.Common.GameObjects;
 using OpenTK.Mathematics;
+using System;
 
 namespace RaceGame.Api.Services.MoveService
 {
@@ -9,7 +10,7 @@ namespace RaceGame.Api.Services.MoveService
         public MoveGameObject RotateLeft(MoveGameObject moveObject)
         {
             //поворот влево
-            moveObject.Angle -= 0.08f;
+            moveObject.Angle += 0.08f;
 
             return moveObject;
         }
@@ -17,16 +18,17 @@ namespace RaceGame.Api.Services.MoveService
         public MoveGameObject RotateRight(MoveGameObject moveObject)
         {
             //поворот вправо
-            moveObject.Angle += 0.08f;
+            moveObject.Angle -= 0.08f;
 
             return moveObject;
         }
 
         public MoveGameObject MoveBack(MoveGameObject moveObject)
         {
-            if (moveObject.Speed > -moveObject.MaxSpeed / 2) //вниз, движение назад
+            if (moveObject.Speed > -moveObject.MaxSpeed / 2 && moveObject.Fuel > 0) //вниз, движение назад
             {
                 moveObject.Speed -= 0.04f;
+                moveObject.Fuel -= Math.Abs(moveObject.Speed);
             }
 
             return moveObject;
@@ -34,9 +36,10 @@ namespace RaceGame.Api.Services.MoveService
 
         public MoveGameObject MoveForward(MoveGameObject moveObject)
         {
-            if (moveObject.Speed < moveObject.MaxSpeed)  //вверх, вперед
+            if (moveObject.Speed < moveObject.MaxSpeed && moveObject.Fuel > 0)  //вверх, вперед
             {
                 moveObject.Speed += 0.04f;
+                moveObject.Fuel -= Math.Abs(moveObject.Speed);
             }
 
             return moveObject;

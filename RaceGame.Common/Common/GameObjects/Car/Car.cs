@@ -7,10 +7,17 @@
 
         // колво правильно пройденных уровней
         public int RightLevelsSequence;
-        public int Fuel { get; set; }
+
         public bool IsFailingTire { get; set; }
+
+        public float MaxFuel { get; set; }
+
         public int Cartridges { get; set; }
 
+        public int MaxCartridges { get; set; }
+
         public bool IsCollizion { get; set; }
+
+        public string PrizeId { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using RaceGame.Api.Common.GameObjects;
 using RaceGame.Api.Common.GameObjects.Car;
+using RaceGame.Common.Common;
 using System.Collections.Generic;
 
 namespace RaceGame.Wpf.Client.NetworkServices
@@ -18,5 +19,8 @@ namespace RaceGame.Wpf.Client.NetworkServices
 
         List<GameObject> GetLevel();
 
+        GameObject[] GetPrizes();
+
+        Point[] GetPrizesState();
     }
 }

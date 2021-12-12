@@ -3,7 +3,6 @@ using RaceGame.Api.Common.GameObjects.Car;
 using RaceGame.Api.Services.CarService;
 using RaceGame.Api.Services.GameService;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace RaceGame.Api.Controllers
 {
@@ -25,7 +24,6 @@ namespace RaceGame.Api.Controllers
         public Car Post([FromBody] string clientId)
         {
             var resultCar = _gameService.AddGamer(clientId);
-            // получаем состояние мира и также возвращаем и его (это уже не rest)
 
             return resultCar;
         }
@@ -37,29 +35,25 @@ namespace RaceGame.Api.Controllers
             return _carServise.GetEnemyCar(clientId);
         }
 
-        // get enemy gamer
         [HttpGet]
         public List<Car> Get()
         {
-            return _gameService.GetAllGamers();
+            return _carServise.GetCars();
         }
 
         // update-gamer/move
-        // PUT api/<GamerController>/5
         [HttpPut("{clientId}/move/{direction}")]
         public Car PutMove(string clientId, int direction)
         {
-            var resultCar = _gameService.MoveGamer(clientId, direction);
-            //var gameState = _gameService.GetGameState();
-            //var result = new { gameObject = gameObject, gameState = gameState };
+            var resultCar = _carServise.MoveGamer(clientId, direction);
+
             return resultCar;
         }
 
-        // DELETE api/<GamerController>/5
         [HttpDelete("{clientId}")]
         public void Delete(string clientId)
         {
-            _gameService.DeleteGamer(clientId);
+            _carServise.DeleteCar(clientId);
         }
     }
 }

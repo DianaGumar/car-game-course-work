@@ -7,6 +7,7 @@ using System.IO;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
 using System.Drawing;
 using OpenTK;
+using RaceGame.Api.Common.GameObjects.Car;
 
 namespace RaceGame.Wpf.Client.DrawServices
 {
@@ -17,6 +18,46 @@ namespace RaceGame.Wpf.Client.DrawServices
         public DrawService()
         {
             ids = new List<int>();
+        }
+
+        public void DrawRectangle(Vector2 Position, Vector2 Size, Color Color)
+        {
+            GL.Begin(PrimitiveType.Quads);
+
+            GL.Color3(Color);
+
+            GL.Vertex3(Position.X, Position.Y, 0);
+            GL.Vertex3(Position.X + Size.X, Position.Y, 0);
+            GL.Vertex3(Position.X + Size.X, Position.Y + Size.Y, 0);
+            GL.Vertex3(Position.X, Position.Y + Size.Y, 0);
+
+            GL.End();
+        }
+
+        public void DrawEmptyRectangle(Vector2 Position, Vector2 Size, Color color)
+        {
+            GL.LineWidth(3.5f);
+            GL.Color3(color);
+            GL.Begin(PrimitiveType.LineStrip);
+
+            GL.Vertex3(Position.X, Position.Y, 0);
+            GL.Vertex3(Position.X + Size.X, Position.Y, 0);
+            GL.Vertex3(Position.X + Size.X, Position.Y + Size.Y, 0);
+            GL.Vertex3(Position.X, Position.Y + Size.Y, 0);
+            GL.Vertex3(Position.X, Position.Y, 0);
+
+            GL.End();
+        }
+
+        public void DrawState(Car obj)
+        {
+            // отрисовка показателя топлива
+            DrawRectangle(new Vector2(50, 20), new Vector2((obj.Fuel*100)/obj.MaxFuel, 20), Color.Green);
+            DrawEmptyRectangle(new Vector2(50, 20), new Vector2(100, 20), Color.Black);
+
+            // отрисовка патронов
+            DrawRectangle(new Vector2(50, 50), new Vector2((obj.Cartridges*100)/obj.MaxCartridges, 20), Color.Red);
+            DrawEmptyRectangle(new Vector2(50, 50), new Vector2(100, 20), Color.Black);
         }
 
         // передаём объект KeyValuePair<int, Vector2> sprite

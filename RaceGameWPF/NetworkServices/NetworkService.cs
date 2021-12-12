@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using RaceGame.Api.Common.GameObjects;
 using RaceGame.Api.Common.GameObjects.Car;
+using RaceGame.Common.Common;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -45,6 +46,22 @@ namespace RaceGame.Wpf.Client.NetworkServices
             var content = response.Content.ReadAsStringAsync().Result;
 
             return JsonConvert.DeserializeObject<List<GameObject>>(content);
+        }
+
+        public GameObject[] GetPrizes()
+        {
+            var response = _httpClient.GetAsync($"api/game-object/prizes").Result;
+            var content = response.Content.ReadAsStringAsync().Result;
+
+            return JsonConvert.DeserializeObject<GameObject[]>(content);
+        }
+
+        public Point[] GetPrizesState()
+        {
+            var response = _httpClient.GetAsync($"api/game-object/prizes/state").Result;
+            var content = response.Content.ReadAsStringAsync().Result;
+
+            return JsonConvert.DeserializeObject<Point[]>(content);
         }
 
         public Car CreateGamer(string clientId)

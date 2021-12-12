@@ -8,16 +8,8 @@ namespace RaceGame.Api.Services.GameService
     {
         public Car AddGamer(string clientId);
 
-        public Car MoveGamer(string clientId, int direction);
+        public List<GameObject> GetAllObjects();
 
-        public void DeleteGamer(string clientId);
-
-        public List<GameObject> GetGameObjects(string gamerId);
-
-        public List<GameObject> GetGameObjects();
-
-        public List<Car> GetAllGamers();
-
-        public GameObject[] GetLevel();
+        public void ResetGame();
     }
 }

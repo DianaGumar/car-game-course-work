@@ -7,6 +7,7 @@ using RaceGame.Api.Common.GameObjects.Car;
 using System.Windows.Input;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 
 namespace RaceGame.Wpf.Client.ClientState
 {
@@ -16,134 +17,42 @@ namespace RaceGame.Wpf.Client.ClientState
         private readonly IDrawService _drawService;
 
         //private Dictionary<string, GameObject> _gameObjects;
-        private List<GameObject> _gameObjects;
+        private GameObject[] _gamePrizes;
         private List<GameObject> _level;
         private Car _gamer;
         private Car _enemyGamer;
         private bool isGamerCreated;
-        private Color[] _colors = new Color[]
-        {
-            Color.Aqua,
-            Color.BlueViolet,
-            Color.LightGreen,
-            Color.Pink,
-            Color.Beige,
-            Color.BurlyWood,
-            Color.Bisque,
-            Color.Aquamarine,
-            Color.BlanchedAlmond,
-            Color.Aqua,
-            Color.BlueViolet,
-            Color.LightGreen,
-            Color.Pink,
-            Color.Beige,
-            Color.BurlyWood,
-            Color.Bisque,
-            Color.Aquamarine,
-            Color.BlanchedAlmond,
-            Color.Aqua,
-            Color.BlueViolet,
-            Color.LightGreen,
-            Color.Pink,
-            Color.Beige,
-            Color.BurlyWood,
-            Color.Bisque,
-            Color.Aquamarine,
-            Color.BlanchedAlmond,
-            Color.Aqua,
-            Color.BlueViolet,
-            Color.LightGreen,
-            Color.Pink,
-            Color.Beige,
-            Color.BurlyWood,
-            Color.Bisque,
-            Color.Aquamarine,
-            Color.BlanchedAlmond,
-                        Color.Aqua,
-            Color.BlueViolet,
-            Color.LightGreen,
-            Color.Pink,
-            Color.Beige,
-            Color.BurlyWood,
-            Color.Bisque,
-            Color.Aquamarine,
-            Color.BlanchedAlmond,
-            Color.Aqua,
-            Color.BlueViolet,
-            Color.LightGreen,
-            Color.Pink,
-            Color.Beige,
-            Color.BurlyWood,
-            Color.Bisque,
-            Color.Aquamarine,
-            Color.BlanchedAlmond,
-            Color.Aqua,
-            Color.BlueViolet,
-            Color.LightGreen,
-            Color.Pink,
-            Color.Beige,
-            Color.BurlyWood,
-            Color.Bisque,
-            Color.Aquamarine,
-            Color.BlanchedAlmond,
-            Color.Aqua,
-            Color.BlueViolet,
-            Color.LightGreen,
-            Color.Pink,
-            Color.Beige,
-            Color.BurlyWood,
-            Color.Bisque,
-            Color.Aquamarine,
-            Color.BlanchedAlmond,
-                        Color.Aqua,
-            Color.BlueViolet,
-            Color.LightGreen,
-            Color.Pink,
-            Color.Beige,
-            Color.BurlyWood,
-            Color.Bisque,
-            Color.Aquamarine,
-            Color.BlanchedAlmond,
-            Color.Aqua,
-            Color.BlueViolet,
-            Color.LightGreen,
-            Color.Pink,
-            Color.Beige,
-            Color.BurlyWood,
-            Color.Bisque,
-            Color.Aquamarine,
-            Color.BlanchedAlmond,
-            Color.Aqua,
-            Color.BlueViolet,
-            Color.LightGreen,
-            Color.Pink,
-            Color.Beige,
-            Color.BurlyWood,
-            Color.Bisque,
-            Color.Aquamarine,
-            Color.BlanchedAlmond,
-            Color.Aqua,
-            Color.BlueViolet,
-            Color.LightGreen,
-            Color.Pink,
-            Color.Beige,
-            Color.BurlyWood,
-            Color.Bisque,
-            Color.Aquamarine,
-            Color.BlanchedAlmond,
-        };
+
+        Timer timer;
 
         public ClientStateService()
         {
             _networkService = new NetworkService();
             _drawService = new DrawService();
-            //_gameObjects = new Dictionary<string, GameObject>();
-            _gameObjects = new List<GameObject>();
         }
 
-        public void GetLevel()
+        private void UpdatePrizes(object obj)
+        {
+            _gamePrizes = _networkService.GetPrizes();
+
+            // получаем игровые призовые объекты.
+            //var state = _networkService.GetPrizesState();
+            //for (int i = 0; i < _gamePrizes.Length; i++)
+            //{
+            //    _gamePrizes[i].PositionX = state[i].PositionX;
+            //    _gamePrizes[i].PositionY = state[i].PositionY;
+            //    _gamePrizes[i].IsDeactivate = false;
+            //}
+        }
+
+        public void GetGameObjects()
         {
             _level = _networkService.GetLevel();
+            _gamePrizes = _networkService.GetPrizes();
+
+            // таймер на обновлнеие координат - устанавливаем метод обратного вызова
+            // создаем таймер - на каждые n сек
+            timer = new Timer(new TimerCallback(UpdatePrizes), null, 0, 20000);
         }
 
         // при старте клиента
@@ -174,16 +83,22 @@ namespace RaceGame.Wpf.Client.ClientState
                 // игрок продолжает движение на заданной скорости
                 _gamer = _networkService.MoveGamer(_gamer.Id, 0);
 
-                // работа с колизией происходит на стороне сервера
-                // кидает запрос на получение обновлённого состояния игры
-                _enemyGamer = _networkService.GetEnemyGamer(_gamer.Id);
-                //var gameObjects = _networkService.GetGameObjects();
+                if (_gamer.PrizeId != null)
+                {
+                    // убираем из видимости этот приз
+                    for (int i = 0; i < _gamePrizes.Length; i++)
+                    {
+                        if (!_gamePrizes[i].IsDeactivate && _gamePrizes[i].Id.Equals(_gamer.PrizeId))
+                        {
+                            _gamePrizes[i].IsDeactivate = true;
+                            break;
+                        }
+                    }                    
+                }
 
-                //for (int i = 0; i < gameObjects.Count; i++)
-                //{
-                //    //gameObjects[i] = _drawService.LoadSprite("", gameObjects[i]);
-                //    _gameObjects.Add(gameObjects[i].Id, gameObjects[i]);
-                //}
+                // работа с колизией происходит на стороне сервера
+                // кидает запрос на получение противника
+                _enemyGamer = _networkService.GetEnemyGamer(_gamer.Id);
             }
         }
 
@@ -193,13 +108,31 @@ namespace RaceGame.Wpf.Client.ClientState
             {
                 for (int i = 0; i < _level.Count(); i++)
                 {
-                    _drawService.Draw(_level[i], _colors[i]);
+                    _drawService.Draw(_level[i], Color.LightGray);
                 }
 
                 // берёт существующие игровые объекты и отрисовывает
-                foreach (var obj in _gameObjects)
+                foreach (var obj in _gamePrizes)
                 {
-                    _drawService.Draw(obj, Color.BlanchedAlmond);
+                    if (!obj.IsDeactivate)
+                    {
+                        if (obj.Name == GameObjectType.Cartridge)
+                        {
+                            _drawService.Draw(obj, Color.Red);
+                        }
+                        else if (obj.Name == GameObjectType.Tire)
+                        {
+                            _drawService.Draw(obj, Color.Black);
+                        }
+                        else if (obj.Name == GameObjectType.Fuel)
+                        {
+                            _drawService.Draw(obj, Color.LawnGreen);
+                        }
+                        else
+                        {
+                            _drawService.Draw(obj, Color.Yellow);
+                        }
+                    }
                 }    
 
                 if (_enemyGamer != null)
@@ -215,6 +148,9 @@ namespace RaceGame.Wpf.Client.ClientState
                 {
                     _drawService.Draw(_gamer, Color.White);
                 }
+
+                // отрисовка показателей игрока
+                _drawService.DrawState(_gamer);
             }
         }
 

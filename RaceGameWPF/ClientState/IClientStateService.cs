@@ -4,7 +4,7 @@ namespace RaceGame.Wpf.Client.ClientState
 {
     public interface IClientStateService
     {
-        void GetLevel();
+        void GetGameObjects();
         bool ConnectClient();
         void ClientAction(Key key);
         void Update();

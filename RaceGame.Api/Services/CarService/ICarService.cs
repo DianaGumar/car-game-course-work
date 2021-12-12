@@ -1,4 +1,5 @@
-﻿using RaceGame.Api.Common.GameObjects.Car;
+﻿using RaceGame.Api.Common.GameObjects;
+using RaceGame.Api.Common.GameObjects.Car;
 using System.Collections.Generic;
 
 namespace RaceGame.Api.Services.CarService
@@ -13,6 +14,8 @@ namespace RaceGame.Api.Services.CarService
         public void UpdateCar(Car car);
 
         public void DeleteCar(string id);
+
+        public Car MoveGamer(string clientId, int direction);
 
     }
 }

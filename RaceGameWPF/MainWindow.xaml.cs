@@ -55,9 +55,8 @@ namespace RaceGameWPF
                 }
             }
 
-            // получаем игровую карту
-            _clientStateService.GetLevel();
-
+            // получаем игровую карту и призы
+            _clientStateService.GetGameObjects();
         }
 
         private void OpenTKControl_Render(TimeSpan obj)

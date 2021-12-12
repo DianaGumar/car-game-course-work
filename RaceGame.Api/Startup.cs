@@ -5,7 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using RaceGame.Api.Services.CarService;
 using RaceGame.Api.Services.GameService;
+using RaceGame.Api.Services.LevelService;
 using RaceGame.Api.Services.MoveService;
+using RaceGame.Api.Services.PrizeService;
 
 namespace RaceGame.Api
 {
@@ -23,11 +25,10 @@ namespace RaceGame.Api
         {
             services.AddSingleton<ICarService, CarService>();
             services.AddSingleton<IMoveService, MoveService>();
+            services.AddSingleton<IPrizeService, PrizeService>();
+            services.AddSingleton<ILevelService, LevelService>();
 
-            services.AddSingleton<IGameService, GameService>();// (serviceProvider =>
-            //{
-            //    return new GameService(Configuration.GetConnectionString("DefaultConnection"));
-            //});
+            services.AddSingleton<IGameService, GameService>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
