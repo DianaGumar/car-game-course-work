@@ -2,17 +2,11 @@
 {
     public class MoveGameObject : GameObject
     {
-        public float Speed { get; set; }
-        public float MaxSpeed { get; set; }
-
-        //public float DirectionX { get; set; } // the second dot of vector. First is position
-
-        //public float DirectionY { get; set; }
-
-        public float Fuel { get; set; }
-        public float SpeedChange { get; set; } // when speed step
-
-        public float OldPositionX { get; set; }
-        public float OldPositionY { get; set; }
+        public virtual float Speed { get; set; }
+        public virtual float MaxSpeed { get; set; }
+        public virtual float Fuel { get; set; }
+        public virtual float SpeedChange { get; set; } // when speed step
+        public virtual float OldPositionX { get; set; }
+        public virtual float OldPositionY { get; set; }
     }
 }

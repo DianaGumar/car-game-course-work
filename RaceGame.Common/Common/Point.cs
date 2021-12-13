@@ -2,7 +2,7 @@
 {
     public class Point
     {
-        public float PositionX { get; set; }
-        public float PositionY { get; set; }
+        public virtual float PositionX { get; set; }
+        public virtual float PositionY { get; set; }
     }
 }

@@ -14,12 +14,11 @@ namespace RaceGame.Api.Services.GameService
             string collisionObjId = null;
 
             // проверка на коллизию с игровыми объектами
-            currentObj = RandomPosition(currentObj);
-
-            while (CollisionHelper.CheckCollision(currentObj, out collisionObjId, gameObjects))
+            do
             {
                 currentObj = RandomPosition(currentObj);
             }
+            while (CollisionHelper.CheckCollision(currentObj, out collisionObjId, gameObjects));
 
             return currentObj;
         }

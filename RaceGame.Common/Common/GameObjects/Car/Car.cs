@@ -3,21 +3,23 @@
     public class Car : MoveGameObject
     {
         // отслеживает количество попорядку пройденных чайтей уровня
-        public int[] LevelsSequence;
+        public virtual int[] LevelsSequence { get; set; }
 
         // колво правильно пройденных уровней
-        public int RightLevelsSequence;
+        public virtual int RightLevelsSequence { get; set; }
 
-        public bool IsFailingTire { get; set; }
+        public virtual bool IsFailingTire { get; set; }
 
-        public float MaxFuel { get; set; }
+        public virtual float MaxFuel { get; set; }
 
-        public int Cartridges { get; set; }
+        public virtual int Cartridges { get; set; }
 
-        public int MaxCartridges { get; set; }
+        public virtual bool Tire { get; set; }
 
-        public bool IsCollizion { get; set; }
+        public virtual int MaxCartridges { get; set; }
 
-        public string PrizeId { get; set; }
+        public virtual bool IsCollizion { get; set; }
+
+        public virtual string PrizeId { get; set; }
     }
 }

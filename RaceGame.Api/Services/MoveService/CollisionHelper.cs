@@ -14,7 +14,7 @@ namespace RaceGame.Api.Services.MoveService
 
             foreach (var obj in gameObjects)
             {
-                if (obj != null && !obj.IsDeactivate && !obj.Id.Equals(gameObject.Id))
+                if (obj != null && !obj.Id.Equals(gameObject.Id)) // !obj.IsDeactivate &&
                 {
                     // проверка на коллизию разделяющей прямой
                     collision = collision || AABBAndAABBB(
@@ -31,21 +31,6 @@ namespace RaceGame.Api.Services.MoveService
             }
 
             return collision;
-
-            //if (enemy != null)
-            //{
-            //    // проверка на коллизию разделяющей прямой
-            //    collision = collision || CollisionHelper.AABBAndAABBB(
-            //    new Vector2(gameObject.PositionX, gameObject.PositionY),
-            //    new Vector2(gameObject.SizeX, gameObject.SizeY),
-            //    new Vector2(enemy.PositionX, enemy.PositionY),
-            //    new Vector2(enemy.SizeX, enemy.SizeY));
-
-            //    if (collision)
-            //    {
-            //        return collision;
-            //    }
-            //}
         }
 
         // коллизия габаритов
@@ -98,9 +83,6 @@ namespace RaceGame.Api.Services.MoveService
         private static Vector2 getInterval(Vector2 min, Vector2 max, Vector2 axis)
         {
             Vector2 result = new Vector2(0, 0);
-
-            //Vector2 min = rect.getMin();
-            //Vector2 max = rect.getMax();
 
             Vector2[] vertices = new Vector2[] {
             new Vector2(min.X, min.Y), new Vector2(min.X, max.Y),

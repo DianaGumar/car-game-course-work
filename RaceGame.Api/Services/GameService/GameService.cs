@@ -39,8 +39,8 @@ namespace RaceGame.Api.Services.GameService
         public List<GameObject> GetAllObjects()
         {
             var gameObjects = new List<GameObject>(_prizeService.GetGamePrizes());
-            gameObjects.Concat(_levelService.GetLevel());
-            gameObjects.Concat(_carService.GetCars());
+            gameObjects = gameObjects.Concat(_levelService.GetLevel()).ToList();
+            gameObjects = gameObjects.Concat(_carService.GetCars()).ToList();
 
             return gameObjects;
         }
