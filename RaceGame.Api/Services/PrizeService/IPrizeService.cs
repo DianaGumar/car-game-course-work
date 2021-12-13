@@ -1,4 +1,5 @@
 ﻿using RaceGame.Api.Common.GameObjects;
+using RaceGame.Api.Common.GameObjects.Car;
 using RaceGame.Common.Common;
 
 namespace RaceGame.Api.Services.PrizeService
@@ -12,5 +13,7 @@ namespace RaceGame.Api.Services.PrizeService
         void RefreshPrizes(GameObject[] objects);
 
         void UpdateGamePrize(string priseId, bool isDeactivate);
+
+        GameObject GetGamePrize(string id);
     }
 }

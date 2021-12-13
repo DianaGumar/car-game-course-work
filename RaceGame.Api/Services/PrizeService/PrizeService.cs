@@ -92,5 +92,10 @@ namespace RaceGame.Api.Services.PrizeService
                 _gamePrizes[i] = PositionHelper.RandomNoCollizionPosition(_gamePrizes[i], objects);
             }
         }
+
+        public GameObject GetGamePrize(string id)
+        {
+            return _gamePrizes.FirstOrDefault(p => p.Id.Equals(id));
+        }
     }
 }

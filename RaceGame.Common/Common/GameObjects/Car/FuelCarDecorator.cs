@@ -1,6 +1,6 @@
 ﻿namespace RaceGame.Api.Common.GameObjects.Car
 {
-    class FuelCarDecorator : CarDecorator
+    public class FuelCarDecorator : CarDecorator
     {
         public FuelCarDecorator(Car car, float fuel) : base(car)
         {

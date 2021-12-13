@@ -30,8 +30,8 @@ namespace RaceGame.Api.Services.CarService
             gamers = new List<Car>();
 
             maxSpeed = 100;
-            maxFuel = 100;
-            startCartridges = 3;
+            maxFuel = 300;
+            startCartridges = 10;
         }
 
         public Car CreateCar(string clientId)
@@ -215,11 +215,61 @@ namespace RaceGame.Api.Services.CarService
             var isPrizeCollizion = CollisionHelper.CheckCollision(car, out collisionObjId, prizes);
             if (isPrizeCollizion)
             {
-                // логика набрасывания приза на игрока
-                car.PrizeId = collisionObjId;
+                if (car.PrizeId == null || !car.PrizeId.Equals(collisionObjId))
+                {
+                    // логика набрасывания приза на игрока
+                    car.PrizeId = collisionObjId;
 
-                // обнуляем приз
-                _prizeService.UpdateGamePrize(collisionObjId, true);
+                    var prize = _prizeService.GetGamePrize(collisionObjId);
+                    if (prize != null)
+                    {
+                        // декорируем машину
+                        car = Decorate(car, prize.Name);
+                    }
+
+                    // обнуляем приз
+                    _prizeService.UpdateGamePrize(collisionObjId, true);
+                }    
+            }
+
+            return car;
+        }
+
+        private Car Decorate(Car car, GameObjectType type)
+        {
+            switch (type)
+            {
+                case GameObjectType.Fuel:
+                    {
+                        if ((car.Fuel + 50) <= car.MaxFuel)
+                        {
+                            car = new FuelCarDecorator(car, car.Fuel + 100).GetCar();           
+                        }
+                        else
+                        {
+                            car = new FuelCarDecorator(car, car.MaxFuel).GetCar();
+                        }
+
+                        break;
+                    }     
+                case GameObjectType.Cartridge:
+                    {
+                        if ((car.Cartridges + 5) <= car.MaxCartridges)
+                        {
+                            car = new CatrigeCarDecorator(car, car.Cartridges + 5).GetCar();
+                        }
+                        else
+                        {
+                            car = new CatrigeCarDecorator(car, car.MaxCartridges).GetCar();
+                        }
+
+                        break;
+                    }
+                case GameObjectType.Tire:
+                    car = new TireCarDecorator(car, true).GetCar();
+                    break;
+                default:
+                    break;
             }
 
             return car;

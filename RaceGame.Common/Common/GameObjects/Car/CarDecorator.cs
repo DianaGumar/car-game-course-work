@@ -1,6 +1,6 @@
 ﻿namespace RaceGame.Api.Common.GameObjects.Car
 {
-    abstract class CarDecorator : Car
+    public abstract class CarDecorator : Car
     {
         //декорируемая машина
         protected Car car;
