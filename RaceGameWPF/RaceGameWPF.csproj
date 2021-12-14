@@ -150,30 +150,15 @@
       <Project>{657b84d8-b248-4fdf-8629-ecebd089208d}</Project>
       <Name>RaceGame.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\RaceGameLibrary\RaceGameLibrary.csproj">
-      <Project>{d5876918-4ac7-46a6-814e-dc1262de2c70}</Project>
-      <Name>RaceGameLibrary</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Sprite\car1.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Sprite\car2.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Sprite\health.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Sprite\patron.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Sprite\RACE.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Sprite\shina.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
+    <Resource Include="Sprite\car1.png" />
+    <Resource Include="Sprite\car2.png" />
+    <Resource Include="Sprite\health.png" />
+    <Resource Include="Sprite\patron.png" />
+    <Resource Include="Sprite\RACE.png" />
+    <Resource Include="Sprite\shina.png" />
+    <Resource Include="Sprite\valun.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Text.Json.6.0.0\build\System.Text.Json.targets" Condition="Exists('..\packages\System.Text.Json.6.0.0\build\System.Text.Json.targets')" />

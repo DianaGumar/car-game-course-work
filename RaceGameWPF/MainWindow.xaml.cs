@@ -67,10 +67,6 @@ namespace RaceGameWPF
             GL.LoadIdentity();
             GL.Ortho(0, Width, Height, 0, 0d, 1d);
 
-            // вызывается раз в n момент времени
-            // обновляет состояние игры - получает текущее состояние игровых объектов
-            //_clientStateService.Update();
-
             // отрисовывает игровые объекты
             _clientStateService.Update();
             _clientStateService.Draw();

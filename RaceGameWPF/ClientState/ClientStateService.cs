@@ -16,7 +16,7 @@ namespace RaceGame.Wpf.Client.ClientState
         private readonly INetworkService _networkService;
         private readonly IDrawService _drawService;
 
-        //private Dictionary<string, GameObject> _gameObjects;
+        private GameObject _bg;
         private GameObject[] _gamePrizes;
         private List<GameObject> _level;
         private Car _gamer;
@@ -35,6 +35,14 @@ namespace RaceGame.Wpf.Client.ClientState
         {
             _networkService = new NetworkService();
             _drawService = new DrawService();
+
+            _bg = new GameObject()
+            {
+                PositionY = 315,
+                PositionX = 540,
+                SizeX = 1080,
+                SizeY = 630,
+            };
         }
 
         private void UpdatePrizes(object obj)
@@ -77,11 +85,12 @@ namespace RaceGame.Wpf.Client.ClientState
             _networkService.UpdateGamerTexture(_gamer);
 
             //// загружаем текстуры других объектов
+            ///
             _enemyTextureId = _drawService.LoadSprite("car2.png", out height, out width);
             _cartriggeTextureId = _drawService.LoadSprite("patron.png", out height, out width);
             _tireTextureId = _drawService.LoadSprite("shina.png", out height, out width);
             _fuelTextureId = _drawService.LoadSprite("health.png", out height, out width);
-            //_bgTextureId = _drawService.LoadSprite("RACE.png", out height, out width);
+            _bg.SpriteId = _drawService.LoadSprite("RACE2.png", out height, out width);
             _bgTextureId = _drawService.LoadSprite("valun.png", out height, out width);
 
 
@@ -130,10 +139,12 @@ namespace RaceGame.Wpf.Client.ClientState
         {
             if (isGamerCreated)
             {
-                for (int i = 0; i < _level.Count(); i++)
-                {
-                    _drawService.Draw(_level[i], Color.LightGray, _bgTextureId);
-                }
+                _drawService.Draw(_bg, Color.White, _bg.SpriteId);
+
+                //for (int i = 0; i < _level.Count(); i++)
+                //{
+                //    _drawService.Draw(_level[i], Color.LightGray, _bgTextureId);
+                //}
 
                 // берёт существующие игровые объекты и отрисовывает
                 foreach (var obj in _gamePrizes)

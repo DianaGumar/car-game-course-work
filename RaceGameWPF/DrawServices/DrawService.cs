@@ -25,7 +25,6 @@ namespace RaceGame.Wpf.Client.DrawServices
             GL.Begin(PrimitiveType.Quads);
 
             GL.Color3(Color);
-
             GL.Vertex3(Position.X, Position.Y, 0);
             GL.Vertex3(Position.X + Size.X, Position.Y, 0);
             GL.Vertex3(Position.X + Size.X, Position.Y + Size.Y, 0);
@@ -37,10 +36,10 @@ namespace RaceGame.Wpf.Client.DrawServices
         public void DrawEmptyRectangle(Vector2 Position, Vector2 Size, Color color)
         {
             GL.LineWidth(3.5f);
-            GL.Color3(color);
-
+            
             GL.Begin(PrimitiveType.LineStrip);
 
+            GL.Color3(color);
             GL.Vertex3(Position.X, Position.Y, 0);
             GL.Vertex3(Position.X + Size.X, Position.Y, 0);
             GL.Vertex3(Position.X + Size.X, Position.Y + Size.Y, 0);
@@ -52,7 +51,9 @@ namespace RaceGame.Wpf.Client.DrawServices
 
         public void DrawState(Car obj)
         {
-            // отрисовка показателя топлива
+            // сбрасываем отрисовку текстур
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+
             DrawRectangle(new Vector2(50, 20), new Vector2((obj.Fuel*100)/obj.MaxFuel, 20), Color.Green);
             DrawEmptyRectangle(new Vector2(50, 20), new Vector2(100, 20), Color.Black);
 
@@ -82,8 +83,8 @@ namespace RaceGame.Wpf.Client.DrawServices
                 new Vector2(0, 1),
             };
 
+            //GL.Enable(EnableCap.Texture2D);
             GL.BindTexture(TextureTarget.Texture2D, textureId);
-
             GL.Begin(PrimitiveType.Quads);
             
             GL.Color3(color);
@@ -98,38 +99,47 @@ namespace RaceGame.Wpf.Client.DrawServices
                     Quaternion.FromEulerAngles(0, 0, obj.Angle));
                 GL.Vertex2(vertices[i]);
             }
+
             GL.End();
         }
 
         // loads img into GL collection and into Game object
         public int LoadSprite(string filePath, out float height, out float width)
         {
-            filePath = "Sprite/" + filePath;
+            filePath = "E:/course_work/New folder/car-game-course-work/RaceGameWPF/Sprite/" + filePath;
             if (!File.Exists(filePath)) throw new Exception("File not found!");
             Bitmap bmp = new Bitmap(filePath);
             BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), 
                 ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
 
-            int id = GL.GenTexture();
-            //GL.BindTexture(TextureTarget.Texture2D, id);
+            //GL.Enable(EnableCap.Texture2D);
+
+            int tex;
+            GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
+
+            GL.GenTextures(1, out tex);
+            GL.BindTexture(TextureTarget.Texture2D, tex);
 
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmp.Width, bmp.Height, 0,
                 OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
 
             bmp.UnlockBits(data);
 
-            GL.TexParameter(TextureTarget.Texture2D, 
-                TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-            GL.TexParameter(TextureTarget.Texture2D, 
-                TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
+
+            // создание mipmap для облегчённого рендеринга - умньшает размер текстуры
+            //GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
 
             // take in memory all ids for dispose option
-            ids.Add(id);
+            ids.Add(tex);
 
             height = bmp.Height;
             width = bmp.Width;
 
-            return id;
+            return tex;
         }
 
         public void Dispose()
