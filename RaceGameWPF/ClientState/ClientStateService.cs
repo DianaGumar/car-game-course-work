@@ -23,6 +23,12 @@ namespace RaceGame.Wpf.Client.ClientState
         private Car _enemyGamer;
         private bool isGamerCreated;
 
+        private int _enemyTextureId;
+        private int _tireTextureId;
+        private int _fuelTextureId;
+        private int _cartriggeTextureId;
+        private int _bgTextureId;
+
         Timer timer;
 
         public ClientStateService()
@@ -33,16 +39,16 @@ namespace RaceGame.Wpf.Client.ClientState
 
         private void UpdatePrizes(object obj)
         {
-            _gamePrizes = _networkService.GetPrizes();
+            //_gamePrizes = _networkService.GetPrizes();
 
-            // получаем игровые призовые объекты.
-            //var state = _networkService.GetPrizesState();
-            //for (int i = 0; i < _gamePrizes.Length; i++)
-            //{
-            //    _gamePrizes[i].PositionX = state[i].PositionX;
-            //    _gamePrizes[i].PositionY = state[i].PositionY;
-            //    _gamePrizes[i].IsDeactivate = false;
-            //}
+            //получаем игровые призовые объекты.
+            var state = _networkService.GetPrizesState();
+            for (int i = 0; i < _gamePrizes.Length; i++)
+            {
+                _gamePrizes[i].PositionX = state[i].PositionX;
+                _gamePrizes[i].PositionY = state[i].PositionY;
+                _gamePrizes[i].IsDeactivate = state[i].IsDeactivate;
+            }
         }
 
         public void GetGameObjects()
@@ -52,7 +58,7 @@ namespace RaceGame.Wpf.Client.ClientState
 
             // таймер на обновлнеие координат - устанавливаем метод обратного вызова
             // создаем таймер - на каждые n сек
-            timer = new Timer(new TimerCallback(UpdatePrizes), null, 0, 20000);
+            //timer = new Timer(new TimerCallback(UpdatePrizes), null, 0, 20000);
         }
 
         // при старте клиента
@@ -61,7 +67,23 @@ namespace RaceGame.Wpf.Client.ClientState
             var clientId = Guid.NewGuid().ToString();
             // connect gamer to game
             _gamer = _networkService.CreateGamer(clientId);
-            //_gamer = (Car)_drawService.LoadSprite("car1.png", _gamer);
+
+            // добавляем игроку текстуру
+            float height = 0;
+            float width = 0;
+            _gamer.SpriteId = _drawService.LoadSprite("car1.png", out height, out width);
+            _gamer.SpriteSizeX = width;
+            _gamer.SpriteSizeY = height;
+            _networkService.UpdateGamerTexture(_gamer);
+
+            //// загружаем текстуры других объектов
+            _enemyTextureId = _drawService.LoadSprite("car2.png", out height, out width);
+            _cartriggeTextureId = _drawService.LoadSprite("patron.png", out height, out width);
+            _tireTextureId = _drawService.LoadSprite("shina.png", out height, out width);
+            _fuelTextureId = _drawService.LoadSprite("health.png", out height, out width);
+            //_bgTextureId = _drawService.LoadSprite("RACE.png", out height, out width);
+            _bgTextureId = _drawService.LoadSprite("valun.png", out height, out width);
+
 
             isGamerCreated = _gamer != null;
 
@@ -83,18 +105,20 @@ namespace RaceGame.Wpf.Client.ClientState
                 // игрок продолжает движение на заданной скорости
                 _gamer = _networkService.MoveGamer(_gamer.Id, 0);
 
-                if (_gamer.PrizeId != null)
-                {
-                    // убираем из видимости этот приз
-                    for (int i = 0; i < _gamePrizes.Length; i++)
-                    {
-                        if (!_gamePrizes[i].IsDeactivate && _gamePrizes[i].Id.Equals(_gamer.PrizeId))
-                        {
-                            _gamePrizes[i].IsDeactivate = true;
-                            break;
-                        }
-                    }                    
-                }
+                UpdatePrizes(null);
+
+                //if (_gamer.PrizeId != null)
+                //{
+                //    // убираем из видимости этот приз
+                //    for (int i = 0; i < _gamePrizes.Length; i++)
+                //    {
+                //        if (!_gamePrizes[i].IsDeactivate && _gamePrizes[i].Id.Equals(_gamer.PrizeId))
+                //        {
+                //            _gamePrizes[i].IsDeactivate = true;
+                //            break;
+                //        }
+                //    }                    
+                //}
 
                 // работа с колизией происходит на стороне сервера
                 // кидает запрос на получение противника
@@ -108,7 +132,7 @@ namespace RaceGame.Wpf.Client.ClientState
             {
                 for (int i = 0; i < _level.Count(); i++)
                 {
-                    _drawService.Draw(_level[i], Color.LightGray);
+                    _drawService.Draw(_level[i], Color.LightGray, _bgTextureId);
                 }
 
                 // берёт существующие игровые объекты и отрисовывает
@@ -118,35 +142,35 @@ namespace RaceGame.Wpf.Client.ClientState
                     {
                         if (obj.Name == GameObjectType.Cartridge)
                         {
-                            _drawService.Draw(obj, Color.Red);
+                            _drawService.Draw(obj, Color.White, _cartriggeTextureId);
                         }
                         else if (obj.Name == GameObjectType.Tire)
                         {
-                            _drawService.Draw(obj, Color.Black);
+                            _drawService.Draw(obj, Color.White, _tireTextureId);
                         }
                         else if (obj.Name == GameObjectType.Fuel)
                         {
-                            _drawService.Draw(obj, Color.LawnGreen);
+                            _drawService.Draw(obj, Color.White, _fuelTextureId);
                         }
                         else
                         {
-                            _drawService.Draw(obj, Color.Yellow);
+                            _drawService.Draw(obj, Color.Yellow, 0);
                         }
                     }
                 }    
 
                 if (_enemyGamer != null)
                 {
-                    _drawService.Draw(_enemyGamer, Color.Black);
+                    _drawService.Draw(_enemyGamer, Color.PowderBlue, _enemyTextureId);
                 }
 
                 if (_gamer.IsCollizion)
                 {
-                    _drawService.Draw(_gamer, Color.Red);
+                    _drawService.Draw(_gamer, Color.Red, _gamer.SpriteId);
                 }
                 else
                 {
-                    _drawService.Draw(_gamer, Color.White);
+                    _drawService.Draw(_gamer, Color.White, _gamer.SpriteId);
                 }
 
                 // отрисовка показателей игрока

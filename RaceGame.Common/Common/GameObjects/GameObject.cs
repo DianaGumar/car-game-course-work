@@ -12,6 +12,5 @@ namespace RaceGame.Api.Common.GameObjects
         public virtual int SpriteId { get; set; }
         public virtual float SpriteSizeX { get; set; }
         public virtual float SpriteSizeY { get; set; }
-        public virtual bool IsDeactivate { get; set; }
     }
 }

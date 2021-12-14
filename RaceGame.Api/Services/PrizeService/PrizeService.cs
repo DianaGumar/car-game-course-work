@@ -77,6 +77,7 @@ namespace RaceGame.Api.Services.PrizeService
                 {
                     PositionX = _gamePrizes[i].PositionX,
                     PositionY = _gamePrizes[i].PositionY,
+                    IsDeactivate = _gamePrizes[i].IsDeactivate,
                 };
             }
 

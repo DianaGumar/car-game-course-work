@@ -14,7 +14,7 @@ namespace RaceGame.Api.Services.MoveService
 
             foreach (var obj in gameObjects)
             {
-                if (obj != null && !obj.Id.Equals(gameObject.Id)) // !obj.IsDeactivate &&
+                if (obj != null && !obj.Id.Equals(gameObject.Id) && !obj.IsDeactivate)
                 {
                     // проверка на коллизию разделяющей прямой
                     collision = collision || AABBAndAABBB(

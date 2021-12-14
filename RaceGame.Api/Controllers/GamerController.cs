@@ -50,6 +50,15 @@ namespace RaceGame.Api.Controllers
             return resultCar;
         }
 
+        // update-gamer/move
+        [HttpPut("texture")]
+        public IActionResult PutTexture([FromBody] Car car)
+        {
+            _carServise.UpdateCarTexture(car);
+
+            return Ok();
+        } 
+
         [HttpDelete("{clientId}")]
         public void Delete(string clientId)
         {

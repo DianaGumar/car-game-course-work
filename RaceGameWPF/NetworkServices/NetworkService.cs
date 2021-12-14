@@ -87,5 +87,10 @@ namespace RaceGame.Wpf.Client.NetworkServices
         {
             _ = _httpClient.DeleteAsync($"api/gamer/{gamerId}").Result;
         }
+
+        public void UpdateGamerTexture(Car car)
+        {
+            _ = _httpClient.PutAsJsonAsync<Car>($"api/gamer/texture", car).Result;
+        }
     }
 }

@@ -55,6 +55,7 @@ namespace RaceGame.Api.Services.CarService
                 SizeX = sizeX,
                 SizeY = sizeY,
                 Speed = 0,
+                Tire = true,
                 MaxSpeed = maxSpeed,
                 MaxFuel = maxFuel,
                 SpeedChange = 2,
@@ -93,9 +94,17 @@ namespace RaceGame.Api.Services.CarService
             {
                 originCar = car;
             } 
+        }
 
-            //gamers.Remove(originCar);
-            //gamers.Add(car);
+        public void UpdateCarTexture(Car car)
+        {
+            var originCar = gamers.FirstOrDefault(c => c.Id.Equals(car.Id));
+            if (originCar != null)
+            {
+                originCar.SpriteId = car.SpriteId;
+                originCar.SpriteSizeX = car.SpriteSizeX;
+                originCar.SpriteSizeY = car.SpriteSizeY;
+            }
         }
 
         public List<Car> GetCars()
@@ -221,7 +230,7 @@ namespace RaceGame.Api.Services.CarService
                     car.PrizeId = collisionObjId;
 
                     var prize = _prizeService.GetGamePrize(collisionObjId);
-                    if (prize != null)
+                    if (prize != null && !prize.IsDeactivate)
                     {
                         // декорируем машину
                         car = Decorate(car, prize.Name);

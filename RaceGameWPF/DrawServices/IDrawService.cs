@@ -9,8 +9,8 @@ namespace RaceGame.Wpf.Client.DrawServices
         // отрисовка показателей игрока
         void DrawState(Car obj);
 
-        void Draw(GameObject gameObject, Color color);
+        void Draw(GameObject gameObject, Color color, int textureId);
 
-        GameObject LoadSprite(string filePath, GameObject obj);
+        int LoadSprite(string filePath, out float height, out float width);
     }
 }

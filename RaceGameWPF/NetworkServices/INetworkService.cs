@@ -17,6 +17,8 @@ namespace RaceGame.Wpf.Client.NetworkServices
 
         void DeleteGamer(string clientId);
 
+        void UpdateGamerTexture(Car car);
+
         List<GameObject> GetLevel();
 
         GameObject[] GetPrizes();
