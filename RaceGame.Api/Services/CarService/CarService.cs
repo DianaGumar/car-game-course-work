@@ -47,23 +47,30 @@ namespace RaceGame.Api.Services.CarService
 
         public Bullet GetShot(string carId)
         {
+            Bullet shot = null; 
             var gamer = GetCar(carId);
 
-            var shot = new Bullet();
-            shot.Id = Guid.NewGuid().ToString();
-            shot.SizeX = 10;
-            shot.SizeY = 10;
-            shot.Speed = 0.9f;
-            shot.SpeedChange = gamer.SpeedChange * 2;
-            shot.PositionX = gamer.PositionX;
-            shot.PositionY = gamer.PositionY;
-            shot.Angle = gamer.Angle;
-            shot.OwnerId = carId;
+            if (gamer.Cartridges > 0)
+            {
+                shot = new Bullet();
+                shot.Id = Guid.NewGuid().ToString();
+                shot.SizeX = 10;
+                shot.SizeY = 10;
+                shot.Speed = 0.9f;
+                shot.SpeedChange = gamer.SpeedChange * 2;
+                shot.PositionX = gamer.PositionX;
+                shot.PositionY = gamer.PositionY;
+                shot.Angle = gamer.Angle;
+                shot.OwnerId = carId;
 
-            var shotOld = _shorts.FirstOrDefault(s => s.IsDeactivate);
-            _shorts.Remove(shotOld);
+                var shotOld = _shorts.FirstOrDefault(s => s.IsDeactivate);
+                _shorts.Remove(shotOld);
 
-            _shorts.Add(shot);
+                _shorts.Add(shot);
+
+                gamer = new CatrigeCarDecorator(gamer, gamer.Cartridges - 1).GetCar();
+                UpdateCar(gamer);
+            }
 
             return shot;
         }
@@ -208,6 +215,8 @@ namespace RaceGame.Api.Services.CarService
             car = CheckAndUpdateWithPrizeCollision(car, _prizeService.GetGamePrizes());
             car = CheckAndUpdateWithBulletCollision(car, _shorts.ToArray());
 
+            UpdateCar(car);
+
             var isLevelCollision = CheckAndUpdateWithLevelCollision(ref car, _levelService.GetLevel());
             if (isLevelCollision)
             {
@@ -283,7 +292,7 @@ namespace RaceGame.Api.Services.CarService
                 {
                     car.IsCollizion = isCollizion;
                     car.Tire = false;
-                    car.Speed = car.Speed < 0.4f ? car.Speed : 0.4f;
+                    car.Speed = car.Speed < 0.4f && car.Speed > 0 ? car.Speed : 0.4f;
 
                     bullet.IsDeactivate = true;
                 }
