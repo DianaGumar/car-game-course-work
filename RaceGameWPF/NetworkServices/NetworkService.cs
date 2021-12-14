@@ -24,6 +24,19 @@ namespace RaceGame.Wpf.Client.NetworkServices
                 new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
+        public void GetShot(string clientId)
+        {
+            _ = _httpClient.PutAsJsonAsync<object>($"api/gamer/{clientId}/shot", null).Result;
+        }
+
+        public Bullet[] GetBullets()
+        {
+            var response = _httpClient.GetAsync($"api/gamer/bullets").Result;
+            var content = response.Content.ReadAsStringAsync().Result;
+
+            return JsonConvert.DeserializeObject<Bullet[]>(content);
+        }
+
         public void ResetGame()
         {
             _ = _httpClient.PutAsJsonAsync<object>($"api/game-object/reset", null).Result;

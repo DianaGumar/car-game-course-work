@@ -15,5 +15,7 @@ namespace RaceGame.Wpf.Client.DrawServices
         void DrawRectangle(Vector2 Position, Vector2 Size, Color Color);
 
         int LoadSprite(string filePath, out float height, out float width);
+
+        void DrawCircle(float x, float y, float radius, Color Color);
     }
 }

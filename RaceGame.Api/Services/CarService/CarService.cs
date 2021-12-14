@@ -3,6 +3,7 @@ using RaceGame.Api.Common.GameObjects.Car;
 using RaceGame.Api.Services.LevelService;
 using RaceGame.Api.Services.MoveService;
 using RaceGame.Api.Services.PrizeService;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,6 +16,7 @@ namespace RaceGame.Api.Services.CarService
         private float maxSpeed;
 
         private List<Car> gamers;
+        private List<Bullet> _shorts;
 
         private readonly IMoveService _moveService;
         private readonly IPrizeService _prizeService;
@@ -28,10 +30,42 @@ namespace RaceGame.Api.Services.CarService
             _levelService = levelService;
 
             gamers = new List<Car>();
+            _shorts = new List<Bullet>();
 
             maxSpeed = 100;
             maxFuel = 300;
             startCartridges = 10;
+        }
+
+        public Bullet[] GetBullets()
+        {
+            // обновляем состояние всех пуль (движение по заданной траектории)
+            BulletsStep();
+
+            return _shorts.ToArray();
+        }
+
+        public Bullet GetShot(string carId)
+        {
+            var gamer = GetCar(carId);
+
+            var shot = new Bullet();
+            shot.Id = Guid.NewGuid().ToString();
+            shot.SizeX = 10;
+            shot.SizeY = 10;
+            shot.Speed = 0.9f;
+            shot.SpeedChange = gamer.SpeedChange * 2;
+            shot.PositionX = gamer.PositionX;
+            shot.PositionY = gamer.PositionY;
+            shot.Angle = gamer.Angle;
+            shot.OwnerId = carId;
+
+            var shotOld = _shorts.FirstOrDefault(s => s.IsDeactivate);
+            _shorts.Remove(shotOld);
+
+            _shorts.Add(shot);
+
+            return shot;
         }
 
         public void ResetCars()
@@ -172,6 +206,7 @@ namespace RaceGame.Api.Services.CarService
             // проверка на коллизию новых параметров игрока
             car = CheckAndUpdateWithLevelRigntSequenceCollision(car, _levelService.GetLevelRightSequensce());
             car = CheckAndUpdateWithPrizeCollision(car, _prizeService.GetGamePrizes());
+            car = CheckAndUpdateWithBulletCollision(car, _shorts.ToArray());
 
             var isLevelCollision = CheckAndUpdateWithLevelCollision(ref car, _levelService.GetLevel());
             if (isLevelCollision)
@@ -189,7 +224,31 @@ namespace RaceGame.Api.Services.CarService
             }
 
             UpdateCar(car);
+
             return car;
+        }
+
+        private void BulletsStep()
+        {
+            for (int i = 0; i < _shorts.Count; i++)
+            {
+                if (!_shorts[i].IsDeactivate)
+                {
+                    string collisionObjId = null;
+                    // проверка на коллизию со стенами
+                    var isCollizion = CollisionHelper.CheckCollision(_shorts[i],
+                        out collisionObjId, _levelService.GetLevel());
+
+                    if (isCollizion)
+                    {
+                        _shorts[i].IsDeactivate = true;
+                    }
+                    else
+                    {
+                        _shorts[i] = (Bullet)_moveService.UpdatePosition(_shorts[i]);
+                    }
+                }
+            }
         }
 
         private bool CheckAndUpdateWithEnemyCollision(ref Car car, Car enemy)
@@ -206,6 +265,31 @@ namespace RaceGame.Api.Services.CarService
 
             car.IsCollizion = isCollizion;
             return isCollizion;
+        }
+
+        private Car CheckAndUpdateWithBulletCollision(Car car, Bullet[] bulllets)
+        {
+            string collisionObjId = null;
+
+            // проверка на коллизию с другим игроком
+            var isCollizion = CollisionHelper.CheckCollision(car, out collisionObjId, bulllets);
+            
+            if (isCollizion )
+            {
+                // находим нужную пулю
+                var bullet = _shorts.FirstOrDefault(s => s.Id.Equals(collisionObjId));
+
+                if (bullet != null && !bullet.OwnerId.Equals(car.Id) && !bullet.IsDeactivate)
+                {
+                    car.IsCollizion = isCollizion;
+                    car.Tire = false;
+                    car.Speed = car.Speed < 0.4f ? car.Speed : 0.4f;
+
+                    bullet.IsDeactivate = true;
+                }
+            }
+            
+            return car;
         }
 
         private Car CheckAndUpdateWithLevelRigntSequenceCollision(Car car, GameObject[] levelRight)
@@ -230,8 +314,6 @@ namespace RaceGame.Api.Services.CarService
 
                     // обнуляем значения
                     car.LevelsSequence = new bool[levelRight.Length];
-
-                    // деактивируем 
                 }
                 else
                 {

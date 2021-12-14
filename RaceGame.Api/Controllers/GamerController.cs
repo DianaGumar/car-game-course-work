@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RaceGame.Api.Common.GameObjects;
 using RaceGame.Api.Common.GameObjects.Car;
 using RaceGame.Api.Services.CarService;
 using RaceGame.Api.Services.GameService;
@@ -35,6 +36,20 @@ namespace RaceGame.Api.Controllers
             return _carServise.GetEnemyCar(clientId);
         }
 
+        [HttpPut("{clientId}/shot")]
+        public IActionResult PutGetShot(string clientId)
+        {
+            _carServise.GetShot(clientId);
+
+            return Ok();
+        }
+
+        [HttpGet("bullets")]
+        public Bullet[] GetBullets()
+        {
+            return _carServise.GetBullets();
+        }
+
         [HttpGet]
         public List<Car> Get()
         {
@@ -64,5 +79,7 @@ namespace RaceGame.Api.Controllers
         {
             _carServise.DeleteCar(clientId);
         }
+
+
     }
 }

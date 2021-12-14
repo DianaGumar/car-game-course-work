@@ -20,6 +20,25 @@ namespace RaceGame.Wpf.Client.DrawServices
             ids = new List<int>();
         }
 
+        public void DrawCircle(float x, float y, float radius, Color Color)
+        {
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+
+            //GL.Enable(EnableCap.Blend);
+            //GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+            GL.Begin(PrimitiveType.TriangleFan);
+            GL.Color3(Color);
+
+            GL.Vertex2(x, y);
+            for (int i = 0; i < 360; i++)
+            {
+                GL.Vertex2(x + Math.Cos(i) * radius, y + Math.Sin(i) * radius);
+            }
+
+            GL.End();
+            //GL.Disable(EnableCap.Blend);
+        }
+
         public void DrawRectangle(Vector2 Position, Vector2 Size, Color Color)
         {
             GL.Begin(PrimitiveType.Quads);

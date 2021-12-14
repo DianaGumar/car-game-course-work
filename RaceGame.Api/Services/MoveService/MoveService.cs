@@ -25,7 +25,7 @@ namespace RaceGame.Api.Services.MoveService
 
         public MoveGameObject MoveBack(MoveGameObject moveObject)
         {
-            if (moveObject.Speed > -moveObject.MaxSpeed / 2 && moveObject.Fuel > 0) //вниз, движение назад
+            if (moveObject.Speed > -moveObject.MaxSpeed / 2 && moveObject.Fuel > 0 && moveObject.Tire) //вниз, движение назад
             {
                 moveObject.Speed -= 0.04f;
                 moveObject.Fuel -= Math.Abs(moveObject.Speed);
@@ -36,7 +36,7 @@ namespace RaceGame.Api.Services.MoveService
 
         public MoveGameObject MoveForward(MoveGameObject moveObject)
         {
-            if (moveObject.Speed < moveObject.MaxSpeed && moveObject.Fuel > 0)  //вверх, вперед
+            if (moveObject.Speed < moveObject.MaxSpeed && moveObject.Fuel > 0 && moveObject.Tire)  //вверх, вперед
             {
                 moveObject.Speed += 0.04f;
                 moveObject.Fuel -= Math.Abs(moveObject.Speed);

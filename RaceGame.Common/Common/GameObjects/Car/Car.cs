@@ -16,8 +16,6 @@ namespace RaceGame.Api.Common.GameObjects.Car
 
         public virtual int Cartridges { get; set; }
 
-        public virtual bool Tire { get; set; }
-
         public virtual int MaxCartridges { get; set; }
 
         public virtual bool IsCollizion { get; set; }

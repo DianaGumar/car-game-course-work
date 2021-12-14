@@ -7,7 +7,6 @@ using RaceGame.Api.Common.GameObjects.Car;
 using System.Windows.Input;
 using System.Drawing;
 using System.Threading;
-using System.Windows;
 
 namespace RaceGame.Wpf.Client.ClientState
 {
@@ -18,6 +17,7 @@ namespace RaceGame.Wpf.Client.ClientState
 
         private GameObject _bg;
         private GameObject[] _gamePrizes;
+        private Bullet[] _bullets;
         private List<GameObject> _level;
         private List<GameObject> _levelRightSequence;
         private Car _gamer;
@@ -113,7 +113,7 @@ namespace RaceGame.Wpf.Client.ClientState
             _tireTextureId = _drawService.LoadSprite("shina.png", out height, out width);
             _fuelTextureId = _drawService.LoadSprite("health.png", out height, out width);
             _bg.SpriteId = _drawService.LoadSprite("RACE2.png", out height, out width);
-            _bgTextureId = _drawService.LoadSprite("valun.png", out height, out width);
+            //_bgTextureId = _drawService.LoadSprite("valun.png", out height, out width);
 
 
             isGamerCreated = _gamer != null;
@@ -123,9 +123,17 @@ namespace RaceGame.Wpf.Client.ClientState
 
         public void ClientAction(Key key)
         {
-            var direction = KeyToCode(key);
+            var keyValue = KeyToCode(key);
 
-            _gamer = _networkService.MoveGamer(_gamer.Id, direction);
+            if (keyValue == 5)
+            {
+                // выстрел
+                _networkService.GetShot(_gamer.Id);
+            }
+            else
+            {
+                _gamer = _networkService.MoveGamer(_gamer.Id, keyValue);
+            }            
         }
 
         // в n-ый промежуток времени
@@ -142,18 +150,7 @@ namespace RaceGame.Wpf.Client.ClientState
 
                 UpdatePrizes(null);
 
-                //if (_gamer.PrizeId != null)
-                //{
-                //    // убираем из видимости этот приз
-                //    for (int i = 0; i < _gamePrizes.Length; i++)
-                //    {
-                //        if (!_gamePrizes[i].IsDeactivate && _gamePrizes[i].Id.Equals(_gamer.PrizeId))
-                //        {
-                //            _gamePrizes[i].IsDeactivate = true;
-                //            break;
-                //        }
-                //    }                    
-                //}
+                _bullets = _networkService.GetBullets();
             }
         }
 
@@ -163,14 +160,14 @@ namespace RaceGame.Wpf.Client.ClientState
             {
                 _drawService.Draw(_bg, Color.White, _bg.SpriteId);
 
-                for (int i = 0; i < _levelRightSequence.Count; i++)
-                {
-                    _drawService.Draw(_levelRightSequence[i], Color.White, 0);
-                }
-
-                //for (int i = 0; i < _level.Count(); i++)
+                //for (int i = 0; i < _levelRightSequence.Count; i++)
                 //{
-                //    _drawService.Draw(_level[i], Color.LightGray, _bgTextureId);
+                //    _drawService.Draw(_levelRightSequence[i], Color.White, 0);
+                //}
+
+                //for (int i = 0; i < _level.Count; i++)
+                //{
+                //    _drawService.Draw(_level[i], Color.LightGray, 0);
                 //}
 
                 // берёт существующие игровые объекты и отрисовывает
@@ -211,6 +208,18 @@ namespace RaceGame.Wpf.Client.ClientState
                     _drawService.Draw(_gamer, Color.White, _gamer.SpriteId);
                 }
 
+                // отрисовка пулей
+                for (int i = 0; i < _bullets.Length; i++)
+                {
+                    if (!_bullets[i].IsDeactivate)
+                    {
+                        _drawService.DrawCircle(_bullets[i].PositionX,
+                        _bullets[i].PositionY, _bullets[i].SizeX / 2, Color.Black);
+                    }
+
+                    //_drawService.Draw(_bullets[i], Color.White, 0);
+                }
+
                 // отрисовка показателей игрока
                 _drawService.DrawState(_gamer);
             }
@@ -234,6 +243,9 @@ namespace RaceGame.Wpf.Client.ClientState
                     break;
                 case Key.D:
                     code = 4;
+                    break;
+                case Key.E:
+                    code = 5;
                     break;
                 default:
                     break;

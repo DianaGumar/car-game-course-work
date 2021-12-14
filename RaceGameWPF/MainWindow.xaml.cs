@@ -93,7 +93,7 @@ namespace RaceGameWPF
 
         private void glWpfControl_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.A || e.Key == Key.W || e.Key == Key.S || e.Key == Key.D)
+            if (e.Key == Key.A || e.Key == Key.W || e.Key == Key.S || e.Key == Key.D || e.Key == Key.E)
             {
                 // обновляет состояние игры через действие игрока - по пришедшей от клиента нажатой клавише
                 _clientStateService.ClientAction(e.Key);
