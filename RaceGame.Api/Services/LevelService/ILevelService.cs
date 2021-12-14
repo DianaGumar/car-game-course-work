@@ -7,5 +7,7 @@ namespace RaceGame.Api.Services.LevelService
         public void CreateLevel();
 
         public GameObject[] GetLevel();
+
+        public GameObject[] GetLevelRightSequensce();
     }
 }

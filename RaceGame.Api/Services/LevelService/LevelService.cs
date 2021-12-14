@@ -7,11 +7,48 @@ namespace RaceGame.Api.Services.LevelService
     public class LevelService : ILevelService
     {
         private GameObject[] _levelObjects;
-        private string[] _levelsRightSequence;
+        private GameObject[] _levelsRightSequence;
 
         public LevelService()
         {
             CreateLevel();
+            CreateLevelRightSequence();
+        }
+
+        public void CreateLevelRightSequence()
+        {
+            // создаём ключевые точки, по которым будет отсчитываться пройденный круг
+            Vector2[] points = new Vector2[]
+            {
+                new Vector2(200,200),
+                new Vector2(600,200),
+                new Vector2(200,500),
+                new Vector2(600,500),
+                new Vector2(100,300),
+            };
+
+            _levelsRightSequence = new GameObject[points.Length];
+            for (int i = 0; i < points.Length-1; i++)
+            {
+                _levelsRightSequence[i] = new GameObject()
+                {
+                    Id = i.ToString(),
+                    PositionX = points[i].X,
+                    PositionY = points[i].Y,
+                    SizeX = 1,
+                    SizeY = 100
+                };
+            }
+
+            int ii = points.Length - 1;
+            _levelsRightSequence[ii] = new GameObject()
+            {
+                Id = ii.ToString(),
+                PositionX = points[ii].X,
+                PositionY = points[ii].Y,
+                SizeX = 100,
+                SizeY = 1
+            };
         }
 
         public void CreateLevel()
@@ -83,7 +120,6 @@ namespace RaceGame.Api.Services.LevelService
             };
 
             _levelObjects = new GameObject[positions.Length];
-            _levelsRightSequence = new string[positions.Length];
             for (int i = 0; i < positions.Length; i++)
             {
                 _levelObjects[i] = new GameObject()
@@ -94,8 +130,6 @@ namespace RaceGame.Api.Services.LevelService
                     SizeX = 100, //sizes[i].X,
                     SizeY = 100 //sizes[i].Y
                 };
-
-                _levelsRightSequence[i] = _levelObjects[i].Id;
             }
         }
 
@@ -103,5 +137,11 @@ namespace RaceGame.Api.Services.LevelService
         {
             return _levelObjects;
         }
+
+        public GameObject[] GetLevelRightSequensce()
+        {
+            return _levelsRightSequence;
+        }
+
     }
 }

@@ -1,9 +1,11 @@
-﻿namespace RaceGame.Api.Common.GameObjects.Car
+﻿using System.Collections.Generic;
+
+namespace RaceGame.Api.Common.GameObjects.Car
 {
     public class Car : MoveGameObject
     {
         // отслеживает количество попорядку пройденных чайтей уровня
-        public virtual int[] LevelsSequence { get; set; }
+        public virtual bool[] LevelsSequence { get; set; }
 
         // колво правильно пройденных уровней
         public virtual int RightLevelsSequence { get; set; }

@@ -1,4 +1,6 @@
-﻿namespace RaceGame.Api.Common.GameObjects.Car
+﻿using System.Collections.Generic;
+
+namespace RaceGame.Api.Common.GameObjects.Car
 {
     public abstract class CarDecorator : Car
     {
@@ -14,7 +16,7 @@
         }
 
         //переопределяем все публичные методы и свойства на декорируемую машину
-        public override int[] LevelsSequence { get => car.LevelsSequence; set => car.LevelsSequence = value; }
+        public override bool[] LevelsSequence { get => car.LevelsSequence; set => car.LevelsSequence = value; }
         public override int RightLevelsSequence { get => car.RightLevelsSequence; set => car.RightLevelsSequence = value; }
         public override bool IsFailingTire { get => car.IsFailingTire; set => car.IsFailingTire = value; }
         public override float MaxFuel { get => car.MaxFuel; set => car.MaxFuel = value; }

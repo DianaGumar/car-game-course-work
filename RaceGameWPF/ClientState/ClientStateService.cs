@@ -6,8 +6,8 @@ using RaceGame.Wpf.Client.DrawServices;
 using RaceGame.Api.Common.GameObjects.Car;
 using System.Windows.Input;
 using System.Drawing;
-using System.Linq;
 using System.Threading;
+using System.Windows;
 
 namespace RaceGame.Wpf.Client.ClientState
 {
@@ -19,6 +19,7 @@ namespace RaceGame.Wpf.Client.ClientState
         private GameObject _bg;
         private GameObject[] _gamePrizes;
         private List<GameObject> _level;
+        private List<GameObject> _levelRightSequence;
         private Car _gamer;
         private Car _enemyGamer;
         private bool isGamerCreated;
@@ -45,6 +46,26 @@ namespace RaceGame.Wpf.Client.ClientState
             };
         }
 
+        public bool IsWon()
+        {
+            if (_enemyGamer == null)
+            {
+                return false;
+            }
+
+            return _gamer.RightLevelsSequence >= 2 || _enemyGamer.RightLevelsSequence >= 2;
+        }
+
+        public bool IsYouWon()
+        {
+            return _gamer.RightLevelsSequence >= 2;
+        }
+
+        public void ResetGame()
+        {
+            _networkService.ResetGame();
+        }
+
         private void UpdatePrizes(object obj)
         {
             //_gamePrizes = _networkService.GetPrizes();
@@ -62,6 +83,7 @@ namespace RaceGame.Wpf.Client.ClientState
         public void GetGameObjects()
         {
             _level = _networkService.GetLevel();
+            _levelRightSequence = _networkService.GetLevelRightSequence();
             _gamePrizes = _networkService.GetPrizes();
 
             // таймер на обновлнеие координат - устанавливаем метод обратного вызова
@@ -114,6 +136,10 @@ namespace RaceGame.Wpf.Client.ClientState
                 // игрок продолжает движение на заданной скорости
                 _gamer = _networkService.MoveGamer(_gamer.Id, 0);
 
+                // работа с колизией происходит на стороне сервера
+                // кидает запрос на получение противника
+                _enemyGamer = _networkService.GetEnemyGamer(_gamer.Id);
+
                 UpdatePrizes(null);
 
                 //if (_gamer.PrizeId != null)
@@ -128,10 +154,6 @@ namespace RaceGame.Wpf.Client.ClientState
                 //        }
                 //    }                    
                 //}
-
-                // работа с колизией происходит на стороне сервера
-                // кидает запрос на получение противника
-                _enemyGamer = _networkService.GetEnemyGamer(_gamer.Id);
             }
         }
 
@@ -140,6 +162,11 @@ namespace RaceGame.Wpf.Client.ClientState
             if (isGamerCreated)
             {
                 _drawService.Draw(_bg, Color.White, _bg.SpriteId);
+
+                for (int i = 0; i < _levelRightSequence.Count; i++)
+                {
+                    _drawService.Draw(_levelRightSequence[i], Color.White, 0);
+                }
 
                 //for (int i = 0; i < _level.Count(); i++)
                 //{
@@ -172,7 +199,7 @@ namespace RaceGame.Wpf.Client.ClientState
 
                 if (_enemyGamer != null)
                 {
-                    _drawService.Draw(_enemyGamer, Color.PowderBlue, _enemyTextureId);
+                    _drawService.Draw(_enemyGamer, Color.White, _enemyTextureId);
                 }
 
                 if (_gamer.IsCollizion)

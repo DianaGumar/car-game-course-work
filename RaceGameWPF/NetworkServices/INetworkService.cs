@@ -24,5 +24,9 @@ namespace RaceGame.Wpf.Client.NetworkServices
         GameObject[] GetPrizes();
 
         Point[] GetPrizesState();
+
+        void ResetGame();
+
+        List<GameObject> GetLevelRightSequence();
     }
 }

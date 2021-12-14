@@ -12,6 +12,6 @@
         <glWpfControl:GLWpfControl x:Name="OpenTKControl" Render="OpenTKControl_Render" Ready="OpenTKControl_Ready">
         </glWpfControl:GLWpfControl>
 
-        <Button x:Name="button1" Width="70" Height="30" Content="End game" Click="EndGame_Button_Click" Margin="967,32,35,537" />
+        <Button x:Name="button1" Width="70" Height="30" Content="End game" Click="EndGame_Button_Click" Margin="992,10,10,559" />
     </Grid>
 </Window>

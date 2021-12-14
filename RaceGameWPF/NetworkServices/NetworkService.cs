@@ -24,6 +24,11 @@ namespace RaceGame.Wpf.Client.NetworkServices
                 new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
+        public void ResetGame()
+        {
+            _ = _httpClient.PutAsJsonAsync<object>($"api/game-object/reset", null).Result;
+        }
+
         public Car GetEnemyGamer(string clientId)
         {
             var response = _httpClient.GetAsync($"api/gamer/{clientId}/enemy").Result;
@@ -35,6 +40,14 @@ namespace RaceGame.Wpf.Client.NetworkServices
         public List<GameObject> GetGameObjects(string gamerId)
         {
             var response = _httpClient.GetAsync($"api/game-object/{gamerId}/all").Result;
+            var content = response.Content.ReadAsStringAsync().Result;
+
+            return JsonConvert.DeserializeObject<List<GameObject>>(content);
+        }
+
+        public List<GameObject> GetLevelRightSequence()
+        {
+            var response = _httpClient.GetAsync($"api/game-object/level/right").Result;
             var content = response.Content.ReadAsStringAsync().Result;
 
             return JsonConvert.DeserializeObject<List<GameObject>>(content);

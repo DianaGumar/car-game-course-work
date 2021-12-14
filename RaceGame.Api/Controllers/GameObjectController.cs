@@ -25,6 +25,14 @@ namespace RaceGame.Api.Controllers
             _priseService = priseService;
         }
 
+        [HttpPut("reset")]
+        public IActionResult ResetGame()
+        {
+            _gameService.ResetGame();
+
+            return Ok();
+        }
+
         [HttpGet("all")]
         public List<GameObject> GetAllGameObjects()
         {
@@ -47,6 +55,12 @@ namespace RaceGame.Api.Controllers
         public List<GameObject> GetLevel()
         {
             return _levelService.GetLevel().ToList();
+        }
+
+        [HttpGet("level/right")]
+        public List<GameObject> GetLevelRightSequence()
+        {
+            return _levelService.GetLevelRightSequensce().ToList();
         }
     }
 }

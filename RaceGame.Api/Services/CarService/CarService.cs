@@ -34,12 +34,26 @@ namespace RaceGame.Api.Services.CarService
             startCartridges = 10;
         }
 
+        public void ResetCars()
+        {
+            // пересоздаём
+            try
+            {
+                gamers[0] = CreateCar(gamers[0].Id);
+                gamers[1] = CreateCar(gamers[1].Id);
+            }
+            catch
+            {
+                // из-за неоднотактовой операции
+            }
+        }
+
         public Car CreateCar(string clientId)
         {
             float positionX = 110;
             float positionY = 210;
 
-            float sizeX = 40;
+            float sizeX = 36;
             float sizeY = 16;
 
             if(gamers.Count> 0)
@@ -64,8 +78,10 @@ namespace RaceGame.Api.Services.CarService
                 Cartridges = startCartridges,
                 MaxCartridges = startCartridges,
                 IsFailingTire = false,
-                LevelsSequence = new int[9]
             };
+
+            var rs = _levelService.GetLevelRightSequensce();
+            car.LevelsSequence = new bool[rs.Length];
 
             return car;
         }
@@ -154,6 +170,7 @@ namespace RaceGame.Api.Services.CarService
             }
 
             // проверка на коллизию новых параметров игрока
+            car = CheckAndUpdateWithLevelRigntSequenceCollision(car, _levelService.GetLevelRightSequensce());
             car = CheckAndUpdateWithPrizeCollision(car, _prizeService.GetGamePrizes());
 
             var isLevelCollision = CheckAndUpdateWithLevelCollision(ref car, _levelService.GetLevel());
@@ -175,13 +192,6 @@ namespace RaceGame.Api.Services.CarService
             return car;
         }
 
-        private Car CreckAndUpdateLevelsSequense(Car car, string levelId)
-        {
-            //gameObject.RightLevelsSequence[]
-
-            return car;
-        }
-
         private bool CheckAndUpdateWithEnemyCollision(ref Car car, Car enemy)
         {
             string collisionObjId = null;
@@ -196,6 +206,40 @@ namespace RaceGame.Api.Services.CarService
 
             car.IsCollizion = isCollizion;
             return isCollizion;
+        }
+
+        private Car CheckAndUpdateWithLevelRigntSequenceCollision(Car car, GameObject[] levelRight)
+        {
+            string collisionObjId = null;
+
+            // проверка на коллизию с отметкой уровня
+            var isCollizion = CollisionHelper.CheckCollision(car, out collisionObjId, levelRight);
+            if (isCollizion)
+            {
+                var id = int.Parse(collisionObjId);
+
+                if(id == 1)
+                {
+                    car.LevelsSequence[4] = false;
+                }
+
+                if (car.LevelsSequence.Where(l => l == false).Count() == 0)
+                {
+                    // защитываем круг пройденным
+                    car.RightLevelsSequence += 1;
+
+                    // обнуляем значения
+                    car.LevelsSequence = new bool[levelRight.Length];
+
+                    // деактивируем 
+                }
+                else
+                {
+                    car.LevelsSequence[id] = true;
+                }
+            }
+
+            return car;
         }
 
         private bool CheckAndUpdateWithLevelCollision(ref Car car, GameObject[] levels)

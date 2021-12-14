@@ -70,6 +70,25 @@ namespace RaceGameWPF
             // отрисовывает игровые объекты
             _clientStateService.Update();
             _clientStateService.Draw();
+
+            // проверка на победу игрока
+            if (_clientStateService.IsWon())
+            {
+                var message = _clientStateService.IsYouWon() ? "You win!" : "you've lost.";
+                var result = MessageBox.Show(message, "Client", MessageBoxButton.OK);
+                switch (result)
+                {
+                    case MessageBoxResult.OK:
+                        {
+                            _clientStateService.EndGame();
+                            this.Close();
+                            break;
+                        }
+                }
+            }
+
+
+
         }
 
         private void glWpfControl_KeyDown(object sender, KeyEventArgs e)

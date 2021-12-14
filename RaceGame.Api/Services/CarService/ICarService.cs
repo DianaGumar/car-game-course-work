@@ -12,10 +12,8 @@ namespace RaceGame.Api.Services.CarService
         public List<Car> GetCars();
         public void UpdateCar(Car car);
         public void UpdateCarTexture(Car car);
-
         public void DeleteCar(string id);
-
         public Car MoveGamer(string clientId, int direction);
-
+        public void ResetCars();
     }
 }

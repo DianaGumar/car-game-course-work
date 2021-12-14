@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using RaceGame.Api.Common.GameObjects.Car;
+using System.Windows.Input;
 
 namespace RaceGame.Wpf.Client.ClientState
 {
@@ -10,5 +11,8 @@ namespace RaceGame.Wpf.Client.ClientState
         void Update();
         void Draw();
         void EndGame();
+        bool IsWon();
+        bool IsYouWon();
+        void ResetGame();
     }
 }
